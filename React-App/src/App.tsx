@@ -30,6 +30,10 @@ import UseClickOutsideDemo from "./beginner/hooks/custom/06_useClickOutside";
 import UseToggleDemo from "./beginner/hooks/custom/07_useToggle";
 import UseFormDemo from "./beginner/hooks/custom/08_useForm";
 
+import Counter from "./beginner/practice/01_Counter";
+import TodoApp from "./beginner/practice/02_TodoApp";
+import CRUDApp from "./beginner/practice/03_CRUDApp";
+
 const App = () => {
   return (
     <div style={{ fontFamily: "sans-serif", padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
@@ -97,6 +101,14 @@ const App = () => {
       <section><UseToggleDemo /></section>
       <hr />
       <section><UseFormDemo /></section>
+
+      <h1>Practice</h1>
+      <hr />
+      <section><Counter /></section>
+      <hr />
+      <section><TodoApp /></section>
+      <hr />
+      <section><CRUDApp /></section>
 
     </div>
   );
