@@ -21,6 +21,15 @@ import UseDebugValueDemo from "./hooks/13_useDebugValue";
 import UseSyncExternalStoreDemo from "./hooks/14_useSyncExternalStore";
 import UseInsertionEffectDemo from "./hooks/15_useInsertionEffect";
 
+import UseFetchDemo from "./hooks/custom/01_useFetch";
+import UseLocalStorageDemo from "./hooks/custom/02_useLocalStorage";
+import UseDebounceDemo from "./hooks/custom/03_useDebounce";
+import UseWindowSizeDemo from "./hooks/custom/04_useWindowSize";
+import UsePreviousDemo from "./hooks/custom/05_usePrevious";
+import UseClickOutsideDemo from "./hooks/custom/06_useClickOutside";
+import UseToggleDemo from "./hooks/custom/07_useToggle";
+import UseFormDemo from "./hooks/custom/08_useForm";
+
 const App = () => {
   return (
     <div style={{ fontFamily: "sans-serif", padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
@@ -70,6 +79,24 @@ const App = () => {
       <section><UseSyncExternalStoreDemo /></section>
       <hr />
       <section><UseInsertionEffectDemo /></section>
+
+      <h1>Custom Hooks</h1>
+      <hr />
+      <section><UseFetchDemo /></section>
+      <hr />
+      <section><UseLocalStorageDemo /></section>
+      <hr />
+      <section><UseDebounceDemo /></section>
+      <hr />
+      <section><UseWindowSizeDemo /></section>
+      <hr />
+      <section><UsePreviousDemo /></section>
+      <hr />
+      <section><UseClickOutsideDemo /></section>
+      <hr />
+      <section><UseToggleDemo /></section>
+      <hr />
+      <section><UseFormDemo /></section>
 
     </div>
   );
