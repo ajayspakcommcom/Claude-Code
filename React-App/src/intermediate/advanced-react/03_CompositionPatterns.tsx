@@ -47,7 +47,7 @@ const ChildrenPropExample = () => (
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "danger" | "ghost";
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const Button = ({ variant = "primary", children, style, ...rest }: ButtonProps) => {
@@ -64,9 +64,9 @@ const Button = ({ variant = "primary", children, style, ...rest }: ButtonProps) 
 };
 
 // Specialised versions — compose by passing props, not by subclassing
-const SaveButton    = (props: Omit<ButtonProps, "variant">) => <Button variant="primary" {...props}>Save</Button>;
-const DeleteButton  = (props: Omit<ButtonProps, "variant">) => <Button variant="danger"  {...props}>Delete</Button>;
-const CancelButton  = (props: Omit<ButtonProps, "variant">) => <Button variant="ghost"   {...props}>Cancel</Button>;
+const SaveButton    = (props: Omit<ButtonProps, "variant" | "children">) => <Button variant="primary" {...props}>Save</Button>;
+const DeleteButton  = (props: Omit<ButtonProps, "variant" | "children">) => <Button variant="danger"  {...props}>Delete</Button>;
+const CancelButton  = (props: Omit<ButtonProps, "variant" | "children">) => <Button variant="ghost"   {...props}>Cancel</Button>;
 
 const SpecialisationExample = () => (
   <div style={{ marginBottom: "20px" }}>
