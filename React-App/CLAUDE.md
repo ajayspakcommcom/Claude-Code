@@ -28,7 +28,7 @@ Build and explore all React features that are **industry standard**, level by le
 - [x] State Management — COMPLETE (`01_ContextReducer`, `02_ReduxToolkit`, `03_RTKQuery`, `04_TanStackQuery`)
 - [x] Forms & Validation — COMPLETE (`01_ReactHookForm`, `02_ZodValidation`, `03_AdvancedPatterns`)
 - [x] Styling — COMPLETE (`01_CSSModules`, `02_StyledComponents`, `03_TailwindCSS`)
-- [ ] Performance
+- [x] Performance — COMPLETE (`01_MemoOptimization`, `02_CodeSplitting`)
 - [ ] API Integration
 - [ ] Testing (Basics)
 - [ ] Practice

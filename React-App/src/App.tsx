@@ -41,6 +41,9 @@ import AdvancedPatternsDemo from "./intermediate/forms-validation/03_AdvancedPat
 import RHFAdvancedDemo from "./intermediate/forms-validation/04_RHFAdvanced";
 import ZodAdvancedDemo from "./intermediate/forms-validation/05_ZodAdvanced";
 
+import MemoOptimizationDemo from "./intermediate/performance/01_MemoOptimization";
+import CodeSplittingDemo from "./intermediate/performance/02_CodeSplitting";
+
 import CSSModulesDemo from "./intermediate/styling/01_CSSModules";
 import StyledComponentsDemo from "./intermediate/styling/02_StyledComponents";
 import TailwindCSSDemo from "./intermediate/styling/03_TailwindCSS";
@@ -152,6 +155,12 @@ const App = () => {
       <section><RHFAdvancedDemo /></section>
       <hr />
       <section><ZodAdvancedDemo /></section>
+
+      <h1>Intermediate — Performance</h1>
+      <hr />
+      <section><MemoOptimizationDemo /></section>
+      <hr />
+      <section><CodeSplittingDemo /></section>
 
       <h1>Intermediate — Styling</h1>
       <hr />

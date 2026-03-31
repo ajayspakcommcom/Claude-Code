@@ -340,6 +340,211 @@ npm install @tanstack/react-query @tanstack/react-query-devtools
 
 ---
 
+---
+
+### ✅ INTERMEDIATE — Forms & Validation (Complete)
+
+All files in `src/intermediate/forms-validation/`:
+
+---
+
+#### 01_ReactHookForm.tsx — Core API
+
+**Demo:** Full registration form (username, email, password, age, website, bio, role, checkbox)
+
+| Concept | Detail |
+|---------|--------|
+| `register(name, rules)` | Connects input to form + sets validation rules (required, minLength, maxLength, min, max, pattern, validate) |
+| `handleSubmit(fn)` | Validates first, calls fn only if valid |
+| `formState.errors` | Per-field error messages |
+| `formState` flags | `isDirty`, `isValid`, `isSubmitting`, `touchedFields` |
+| `watch("field")` | Live value — triggers re-render (used for confirm password) |
+| `reset()` | Reset to defaults or new values |
+| `setValue()` | Set field value programmatically (with shouldDirty, shouldValidate options) |
+| `getValues()` | Snapshot of all values, no re-render |
+| `setError()` | Inject server-side errors (e.g. "username taken") |
+| `clearErrors()` | Clear specific or all errors |
+| `mode: "onTouched"` | Validate on blur first, then on change after touched — best UX |
+
+---
+
+#### 02_ZodValidation.tsx — Zod + zodResolver
+
+**Demo:** Profile form with nested address, cross-field password validation
+
+| Concept | Detail |
+|---------|--------|
+| `z.string().min/max/email/url/regex` | All string field types |
+| `z.coerce.number().int().min().max()` | Converts HTML string input to number |
+| `z.boolean()` / `z.literal(true)` | Checkbox must be checked |
+| `z.enum([...])` | Fixed allowed values (country select) |
+| `z.object({ nested })` | Nested address object (street, city, zip) |
+| `.optional().or(z.literal(""))` | Optional HTML fields |
+| `.superRefine((data, ctx) => ctx.addIssue(...))` | Cross-field validation (confirm password) |
+| `z.infer<typeof schema>` | TypeScript type derived from schema — no duplication |
+| `zodResolver(schema)` | Connects Zod schema to RHF |
+
+---
+
+#### 03_AdvancedPatterns.tsx — 4 production patterns
+
+**Demos:** Team builder, order form, checkout, 3-step wizard
+
+| Pattern | Detail |
+|---------|--------|
+| `useFieldArray` | Dynamic team members list — `append`, `remove`, use `field.id` as key (never index) |
+| `useWatch` | Conditional fields (delivery address, gift message) — efficient, only re-renders on watched field |
+| `Controller` | Custom star rating component — `render={({ field }) => ...}` gives `field.value` + `field.onChange` |
+| `FormProvider` + `useFormContext` | Checkout form split into `PersonalInfoSection` + `PaymentSection` — no prop drilling |
+| Multi-step + `trigger()` | 3-step wizard — `trigger(["field1","field2"])` validates only current step before advancing |
+
+---
+
+#### 04_RHFAdvanced.tsx — Missing RHF features
+
+**Demos:** 6 focused demos, one per feature
+
+| Feature | Detail |
+|---------|--------|
+| `criteriaMode: "all"` | Password checklist — `errors.field.types` has ALL failing rules simultaneously |
+| `reValidateMode` | Toggle `onChange` / `onBlur` / `onSubmit` — controls when errors clear after first submit |
+| `resetField(name, options?)` | Reset one field's value + dirty + touched + error independently |
+| `setFocus(name)` | Auto-focus first field on mount; jump to first error on failed submit |
+| `shouldUnregister: true` | Hidden field values excluded from submitted data when component unmounts |
+| `errors.root.serverError` | Form-level error for API responses — keeps field styles clean |
+
+---
+
+#### 05_ZodAdvanced.tsx — Missing Zod features
+
+**Demos:** 5 focused demos, one per feature group
+
+| Feature | Detail |
+|---------|--------|
+| `z.array(schema).min().max().nonempty()` | Skills list (1–6 items) + tags — validates count + each item |
+| `z.discriminatedUnion("key", [...])` | Payment form — card/PayPal/crypto each have different fields, picked by discriminant |
+| `z.coerce.date().min(new Date())` | Event form — future dates only, cross-field end > start |
+| `z.record(z.string(), z.string())` | Settings form — env vars + feature flags with dynamic keys |
+| `.extend()` / `.omit()` / `.pick()` / `.partial()` / `.merge()` | One `userBaseSchema` → 5 derived variants (register, admin edit, public profile, PATCH, full) |
+
+#### Packages installed
+```bash
+npm install react-hook-form zod @hookform/resolvers
+```
+Note: Zod v4 uses `error:` instead of `errorMap:` in enum/literal params. `z.coerce.number()` resolver needs `as Resolver<T>` cast for TypeScript compatibility.
+
+---
+
+### ✅ INTERMEDIATE — Styling (Complete)
+
+All files in `src/intermediate/styling/`:
+
+#### Setup added
+- `webpack.config.js` — CSS rules: `style-loader` + `css-loader` (with modules) + `postcss-loader`
+- `postcss.config.js` — tailwindcss + autoprefixer plugins
+- `tailwind.config.js` — content: `./src/**/*.{tsx,ts}`
+- `src/tailwind.css` — `@tailwind base/components/utilities`
+- `src/declarations.d.ts` — TypeScript type for `*.module.css` imports
+
+```bash
+npm install style-loader css-loader postcss-loader postcss tailwindcss autoprefixer styled-components @types/styled-components
+```
+
+---
+
+#### 01_CSSModules.tsx + 01_CSSModules.module.css
+
+**Demo:** Card variants, button row, form with error states
+
+| Concept | Detail |
+|---------|--------|
+| Scoped class names | Webpack transforms `.card` → `Card__card--xK3p9` — never clashes across files |
+| `import styles from './file.module.css'` | All classes accessed as `styles.card` |
+| Multiple classes | `` `${styles.card} ${styles.primary}` `` |
+| Dynamic classes | `styles[variant]` — bracket notation for runtime class selection |
+| Conditional classes | `` `${styles.input} ${error ? styles.inputError : ""}` `` |
+| `composes` | `btnLarge` inherits from `btn` + `btnPrimary` — CSS-side reuse |
+| `:global` | Opt out of scoping for specific selectors (rare) |
+
+---
+
+#### 02_StyledComponents.tsx
+
+**Demo:** Theme-aware card grid, button showcase, form, animation demo with light/dark toggle
+
+| Concept | Detail |
+|---------|--------|
+| `styled.div\`css\`` | Basic styled component — CSS in tagged template literal |
+| `styled(Component)\`css\`` | Extend any component (`PulseButton` extends `Button`) |
+| Props-based styles | `${(p) => p.variant === 'primary' && css\`...\`}` — conditional CSS blocks |
+| Theme access | `${(p) => p.theme.colors.primary}` — reads from ThemeProvider |
+| `ThemeProvider` | Wraps tree — provides theme object to all styled components |
+| `useTheme()` | Read theme inside any component |
+| `createGlobalStyle` | Global CSS (e.g. body reset, font-face) |
+| `keyframes` | `fadeIn`, `pulse` — CSS animations |
+| `css` helper | Reusable CSS snippets (`flexCenter`, `truncate`) |
+| `.attrs({ required: true })` | Default HTML attributes on styled component |
+| `as="a"` | Render Button as `<a>` tag |
+| `$propName` | Transient prop — not forwarded to DOM (e.g. `$loading`, `$hasError`) |
+
+---
+
+#### 03_TailwindCSS.tsx
+
+**Demo:** Card variants, button system, responsive grid, dark mode toggle, arbitrary values, form
+
+| Concept | Detail |
+|---------|--------|
+| Utility classes | `bg-blue-500 text-white p-4 rounded-lg shadow-md` — compose in JSX |
+| State variants | `hover:bg-blue-600 focus:ring-2 active:scale-95 disabled:opacity-50` |
+| Responsive | `grid-cols-1 sm:grid-cols-2 lg:grid-cols-4` — mobile-first breakpoints |
+| Dark mode | `dark:bg-gray-900 dark:text-white` — enabled by `class="dark"` on parent |
+| Arbitrary values | `bg-[#ff6b6b] w-[320px] text-[13px] grid-cols-[2fr_1fr]` |
+| `cn()` helper | Conditional class joining — production uses `clsx` + `tailwind-merge` |
+| Built-in animations | `animate-spin animate-pulse animate-bounce` |
+| Transitions | `transition-all duration-200 ease-in-out` |
+
+---
+
+### ✅ INTERMEDIATE — Performance (Complete)
+
+All files in `src/intermediate/performance/`:
+
+---
+
+#### 01_MemoOptimization.tsx — Memoization
+
+**Demo:** Live render counters on every component to make re-renders visible
+
+| Concept | Detail |
+|---------|--------|
+| `React.memo(Component)` | Skip re-render when props unchanged (shallow equal) |
+| Custom `areEqual` | `memo(Component, (prev, next) => prev.id === next.id)` — only re-render when id changes |
+| `useMemo(fn, deps)` | Cache expensive filter/sort (500-item list with 5ms artificial delay) |
+| `useCallback(fn, deps)` | Stable function refs — without it, memo'd children re-render even when nothing changed |
+| Common mistakes | Inline `{}` and `[]` literals create new references every render → break `React.memo` |
+| Fix | `useMemo(() => ({ label: "x" }), [])` + `useCallback(() => fn(), [])` |
+| When NOT to memo | Simple components, cheap computations, deps change every render — overhead costs more than it saves |
+
+---
+
+#### 02_CodeSplitting.tsx — Code Splitting & Lazy Loading
+
+**Demo:** 4 interactive demos with simulated network delays
+
+| Concept | Detail |
+|---------|--------|
+| `React.lazy(() => import('./X'))` | Creates a separate JS chunk, downloads on first render |
+| `<Suspense fallback={<Spinner/>}>` | Required wrapper — shows fallback while chunk loads |
+| Spinner fallback | Simple animated spinner |
+| Skeleton fallback | Shimmer placeholder matching content shape — better for slow loads |
+| `ErrorBoundary` | Catches chunk load failures (network error, CDN timeout, hash mismatch after deploy) |
+| Preloading | Call `import('./X')` on hover to warm cache — instant render on click |
+| Suspense boundary placement | One boundary = all wait together. Separate boundaries = each loads independently (better UX) |
+| Default export requirement | `lazy()` requires a default export from the target module |
+
+---
+
 ## What's Next
 
 ### Remaining Intermediate sections
@@ -347,24 +552,24 @@ npm install @tanstack/react-query @tanstack/react-query-devtools
 ✅ Advanced React
 ✅ Routing (File-based + Code-based)
 ✅ State Management
-⬜ Forms & Validation  ← NEXT
-⬜ Styling
-⬜ Performance
-⬜ API Integration
+✅ Forms & Validation
+✅ Styling
+✅ Performance
+⬜ API Integration  ← NEXT
 ⬜ Testing (Basics)
 ⬜ Practice
 ```
 
-### Forms & Validation — plan
-All work inside `React-App/src/intermediate/forms-validation/`
+### API Integration — plan
+All work inside `React-App/src/intermediate/api-integration/`
 
 | File | Concept |
 |------|---------|
-| `01_ReactHookForm.tsx` | `useForm`, `register`, `handleSubmit`, `formState.errors` |
-| `02_ZodValidation.tsx` | `zodResolver`, schema validation, nested objects, custom rules |
-| `03_AdvancedPatterns.tsx` | `useFieldArray`, `useWatch`, `Controller`, dynamic forms |
+| `01_FetchAPI.tsx` | `fetch`, async/await, loading/error states, AbortController |
+| `02_Axios.tsx` | axios instance, interceptors, request/response transform |
+| `03_ErrorHandling.tsx` | HTTP error codes, retry logic, global error handling |
 
-Install needed: `npm install react-hook-form zod @hookform/resolvers`
+Install needed: `npm install axios`
 
 ---
 
