@@ -35,6 +35,7 @@ import LiftingStateUpDemo from "./intermediate/advanced-react/02_LiftingStateUp"
 import CompositionPatternsDemo from "./intermediate/advanced-react/03_CompositionPatterns";
 import RefsAdvancedDemo from "./intermediate/advanced-react/04_Refs";
 import ContextAPIDemo from "./intermediate/advanced-react/05_ContextAPI";
+import CodeBasedRouterDemo from "./intermediate/routing/code-based/CodeBasedRouter";
 
 import Counter from "./beginner/practice/01_Counter";
 import TodoApp from "./beginner/practice/02_TodoApp";
@@ -127,6 +128,10 @@ const App = () => {
       <section><RefsAdvancedDemo /></section>
       <hr />
       <section><ContextAPIDemo /></section>
+
+      <h1>Intermediate — Routing</h1>
+      <hr />
+      <section><CodeBasedRouterDemo /></section>
 
     </div>
   );
