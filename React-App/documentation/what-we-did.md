@@ -560,16 +560,76 @@ All files in `src/intermediate/performance/`:
 ⬜ Practice
 ```
 
-### API Integration — plan
+### API Integration — COMPLETE ✅
 All work inside `React-App/src/intermediate/api-integration/`
 
-| File | Concept |
-|------|---------|
-| `01_FetchAPI.tsx` | `fetch`, async/await, loading/error states, AbortController |
-| `02_Axios.tsx` | axios instance, interceptors, request/response transform |
-| `03_ErrorHandling.tsx` | HTTP error codes, retry logic, global error handling |
+Installed: `npm install axios`
 
-Install needed: `npm install axios`
+| File | Concept | Status |
+|------|---------|--------|
+| `01_FetchAPI.tsx` | Fetch API — GET/POST/PUT/PATCH/DELETE, AbortController, URLSearchParams, timeout, parallel, sequential, useFetch hook | ✅ Done |
+| `02_Axios.tsx` | Axios — axios.create(), interceptors, typed generics, automatic JSON, error handling, cancellation, Fetch vs Axios table | ✅ Done |
+| `03_ErrorHandling.tsx` | Error patterns — classification, retry+backoff, optimistic updates, toast, ErrorBoundary, global interceptor | ✅ Done |
+
+#### 01_FetchAPI.tsx — 8 demos
+| Section | Concepts |
+|---------|----------|
+| Basic GET | `fetch(url, { signal })`, `response.ok`, `response.json()`, `AbortController`, useEffect cleanup |
+| Query params | `URLSearchParams({ key: val })` → auto-encoded query string |
+| POST | `method: "POST"`, `Content-Type: application/json`, `body: JSON.stringify(data)` |
+| PUT/PATCH/DELETE | method switching, PUT = full replace, PATCH = partial, DELETE = no body |
+| Timeout | `AbortController` + `setTimeout(() => controller.abort(), ms)` |
+| Parallel | `Promise.all([fetch1, fetch2])` — both fire simultaneously |
+| Sequential | `await` in order — each depends on previous result |
+| useFetch hook | Reusable generic `useFetch<T>(url)` — loading/error/data + cleanup |
+
+**Key fetch vs axios difference:** `fetch` does NOT throw on 4xx/5xx — always check `response.ok`.
+
+#### 02_Axios.tsx — 6 demos
+| Section | Concepts |
+|---------|----------|
+| Basic GET | `api.get<T>(url, { params })` → typed `response.data`, no `.json()` needed |
+| Mutations | `api.post/put/patch/delete` — automatic JSON stringify, Content-Type |
+| Error handling | `axios.isAxiosError(err)`, `err.response`, `err.code === "ECONNABORTED"` |
+| Cancellation | `AbortController` with `{ signal: controller.signal }` — cancel on unmount |
+| Parallel | `Promise.all([api.get<A>(), api.get<B>()])` — each typed independently |
+| Interceptors | Request (inject auth token) + Response (log, 401 redirect, error forwarding) |
+
+**axios.create():** `baseURL`, `timeout` (built-in — no setTimeout hack), `headers` defaults.
+**Interceptors:** middleware pattern — one place for auth tokens and global error handling.
+
+#### 03_ErrorHandling.tsx — 6 demos
+| Section | Concepts |
+|---------|----------|
+| Error classification | `classifyError()` maps AxiosError → `{ type, message, detail, retryable }` |
+| Retry + backoff | `fetchWithRetry()` — 3 attempts, 500ms/1s/2s delays, skip non-retryable errors |
+| Optimistic updates | Save snapshot → update UI → API call → rollback on failure |
+| Toast notifications | Non-blocking, auto-dismiss (3s), click-to-dismiss, success/error/info variants |
+| Error Boundary | `getDerivedStateFromError` + `componentDidCatch` — catches render crashes |
+| Global interceptor | Axios response interceptor routes ALL errors to one handler (Sentry, logging) |
+
+**Error classification rules:**
+- `!err.response` → network error (no internet, CORS, DNS) — retryable
+- `err.code === "ECONNABORTED"` → timeout — retryable
+- `status 401/403` → auth error — NOT retryable
+- `status 404` → not found — NOT retryable
+- `status >= 500` → server error — retryable
+
+**Optimistic update pattern:** `const previous = [...items]` → update state → await API → on error: `setItems(previous)`.
+
+**What's Next:**
+```
+✅ Beginner (Foundations)
+✅ Advanced React
+✅ Routing (File-based + Code-based)
+✅ State Management (Context, Redux Toolkit, RTK Query, TanStack Query)
+✅ Forms & Validation (RHF + Zod — all patterns)
+✅ Styling (CSS Modules, Styled Components, Tailwind CSS)
+✅ Performance (Memo, Code Splitting)
+✅ API Integration (Fetch, Axios, Error Handling)
+⬜ Testing (Basics) ← NEXT
+⬜ Practice
+```
 
 ---
 

@@ -29,7 +29,7 @@ Build and explore all React features that are **industry standard**, level by le
 - [x] Forms & Validation — COMPLETE (`01_ReactHookForm`, `02_ZodValidation`, `03_AdvancedPatterns`)
 - [x] Styling — COMPLETE (`01_CSSModules`, `02_StyledComponents`, `03_TailwindCSS`)
 - [x] Performance — COMPLETE (`01_MemoOptimization`, `02_CodeSplitting`)
-- [ ] API Integration
+- [x] API Integration — COMPLETE (`01_FetchAPI`, `02_Axios`, `03_ErrorHandling`)
 - [ ] Testing (Basics)
 - [ ] Practice
 
@@ -144,15 +144,56 @@ All work inside `React-App/src/intermediate/forms-validation/`.
 | `04_RHFAdvanced.tsx` | `criteriaMode: "all"`, `reValidateMode`, `resetField`, `setFocus`, `shouldUnregister`, `errors.root` | ✅ Done |
 | `05_ZodAdvanced.tsx` | `z.array`, `z.discriminatedUnion`, `z.date`, `z.record`, `.extend/.pick/.omit/.partial/.merge` | ✅ Done |
 
-## Styling — NEXT
+## API Integration — COMPLETE ✅
+
+All work inside `React-App/src/intermediate/api-integration/`.
+
+| File | Concept | Status |
+|------|---------|--------|
+| `01_FetchAPI.tsx` | Basic GET, POST, PUT/PATCH/DELETE, AbortController, timeout, parallel, sequential, custom useFetch | ✅ Done |
+| `02_Axios.tsx` | axios.create(), interceptors, automatic JSON, typed generics, cancellation, parallel | ✅ Done |
+| `03_ErrorHandling.tsx` | Error classification, retry + backoff, optimistic updates, toast, ErrorBoundary, global interceptor | ✅ Done |
+
+### What each file demonstrates
+
+**01_FetchAPI** — native browser API, no library
+- Basic GET + AbortController + useEffect cleanup
+- URLSearchParams for query params
+- POST with `Content-Type: application/json` + `JSON.stringify`
+- PUT / PATCH / DELETE with method + body
+- Timeout via `AbortController + setTimeout`
+- Parallel with `Promise.all`, sequential (chained) awaits
+- Custom `useFetch<T>` hook (reusable pattern)
+
+**02_Axios** — most popular HTTP library
+- `axios.create()` with `baseURL`, `timeout`, default headers
+- `axios.get<T>()` → `response.data` already typed and parsed (no `.json()`)
+- Axios throws on 4xx/5xx automatically (fetch does NOT)
+- POST/PUT/PATCH/DELETE — no `JSON.stringify`, no manual Content-Type
+- `axios.isAxiosError(err)` type guard, `AxiosError` structure
+- `AbortController` cancellation (axios ≥ 0.22)
+- Request interceptors (inject auth token) + Response interceptors (global error handling)
+- Fetch vs Axios comparison table
+
+**03_ErrorHandling** — production error patterns
+- `classifyError()` — maps AxiosError → typed `{ type, message, detail, retryable }`
+- `fetchWithRetry()` with exponential backoff (500ms → 1s → 2s)
+- Optimistic updates — update UI first, rollback on server error
+- Toast notification pattern (non-blocking, auto-dismiss, click to dismiss)
+- `RenderErrorBoundary` class component — `getDerivedStateFromError`, `componentDidCatch`
+- Global axios interceptor — all errors flow through one place for Sentry / logging
+
+---
+
+## Styling — COMPLETE ✅
 
 All work inside `React-App/src/intermediate/styling/`.
 
 | File | Concept | Status |
 |------|---------|--------|
-| `01_CSSModules.tsx` | Scoped class names, composition, dynamic classes | ⬜ **START HERE** |
-| `02_StyledComponents.tsx` | Tagged template literals, props-based styles, theming | ⬜ |
-| `03_TailwindCSS.tsx` | Utility classes, responsive, dark mode | ⬜ |
+| `01_CSSModules.tsx` | Scoped class names, composition, dynamic classes | ✅ Done |
+| `02_StyledComponents.tsx` | Tagged template literals, props-based styles, theming | ✅ Done |
+| `03_TailwindCSS.tsx` | Utility classes, responsive, dark mode | ✅ Done |
 
 ---
 

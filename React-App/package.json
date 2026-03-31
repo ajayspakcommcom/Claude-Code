@@ -13,6 +13,7 @@
     "@tanstack/react-router": "^1.161.3",
     "@types/styled-components": "^5.1.36",
     "autoprefixer": "^10.4.27",
+    "axios": "^1.14.0",
     "css-loader": "^7.1.4",
     "postcss": "^8.5.8",
     "postcss-loader": "^8.2.1",

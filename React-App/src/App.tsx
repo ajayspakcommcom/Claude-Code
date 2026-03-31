@@ -48,6 +48,10 @@ import CSSModulesDemo from "./intermediate/styling/01_CSSModules";
 import StyledComponentsDemo from "./intermediate/styling/02_StyledComponents";
 import TailwindCSSDemo from "./intermediate/styling/03_TailwindCSS";
 
+import FetchAPIDemo from "./intermediate/api-integration/01_FetchAPI";
+import AxiosDemo from "./intermediate/api-integration/02_Axios";
+import ErrorHandlingDemo from "./intermediate/api-integration/03_ErrorHandling";
+
 import ControlledVsUncontrolledDemo from "./intermediate/advanced-react/01_ControlledVsUncontrolled";
 import LiftingStateUpDemo from "./intermediate/advanced-react/02_LiftingStateUp";
 import CompositionPatternsDemo from "./intermediate/advanced-react/03_CompositionPatterns";
@@ -169,6 +173,14 @@ const App = () => {
       <section><StyledComponentsDemo /></section>
       <hr />
       <section><TailwindCSSDemo /></section>
+
+      <h1>Intermediate — API Integration</h1>
+      <hr />
+      <section><FetchAPIDemo /></section>
+      <hr />
+      <section><AxiosDemo /></section>
+      <hr />
+      <section><ErrorHandlingDemo /></section>
 
       <h1>Intermediate — Advanced React</h1>
       <hr />
