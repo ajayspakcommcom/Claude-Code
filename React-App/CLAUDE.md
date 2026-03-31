@@ -23,9 +23,9 @@ Build and explore all React features that are **industry standard**, level by le
 
 ## Intermediate Progress
 - [x] Advanced React — COMPLETE (`src/intermediate/advanced-react/`)
-- [x] Routing — PARTIAL (`React-App-FileRouter/` — separate Vite project)
-- [ ] Routing — Remaining concepts — **NEXT (start here)**
-- [ ] State Management
+- [x] Routing — File-based COMPLETE (`React-App-FileRouter/` — separate Vite project)
+- [x] Routing — Code-based COMPLETE (`React-App-CodeRouter/` — separate Vite project)
+- [ ] State Management — **NEXT (start here)**
 - [ ] Forms & Validation
 - [ ] Styling
 - [ ] Performance
@@ -52,8 +52,42 @@ Claude-Code/
 │       └── intermediate/
 │           └── advanced-react/       ← 5 files
 │
-└── React-App-FileRouter/             ← Routing project (Vite, port 5173)
-    └── src/routes/                   ← TanStack Router file-based routing
+├── React-App-FileRouter/             ← File-based routing (Vite, port 5173)
+│   └── src/
+│       ├── main.tsx                  ← router config: context, scrollRestoration, pendingMs
+│       ├── auth.ts                   ← simple auth store
+│       ├── components/
+│       │   └── HeavyPage.tsx         ← lazy-loaded component (code split)
+│       └── routes/
+│           ├── __root.tsx            ← createRootRouteWithContext, nav, activeOptions
+│           ├── index.tsx             ← /  (home, file→route mapping table)
+│           ├── about.tsx             ← /about
+│           ├── login.tsx             ← /login (useNavigate, useSearch for redirect)
+│           ├── contact.tsx           ← /contact (useNavigate full demo)
+│           ├── lazy-demo.tsx         ← /lazy-demo (lazyRouteComponent, code splitting)
+│           ├── users/
+│           │   ├── index.tsx         ← /users (pendingComponent, staleTime)
+│           │   └── $userId.tsx       ← /users/:id (useParams in nested component, errorComponent)
+│           ├── products/
+│           │   ├── index.tsx         ← /products (useSearch, loaderDeps, activeOptions, route masking, context)
+│           │   └── $productId.tsx    ← /products/:id (parallel loaders, useParams nested)
+│           └── _auth/
+│               ├── _auth.tsx         ← pathless layout (beforeLoad guard)
+│               └── dashboard.tsx     ← /dashboard (protected route)
+│
+└── React-App-CodeRouter/             ← Code-based routing (Vite, port 5173)
+    └── src/
+        ├── router.tsx                ← ALL routes defined here (createRoute + addChildren)
+        ├── auth.ts
+        └── pages/
+            ├── Home.tsx              ← / (comparison table: file-based vs code-based)
+            ├── About.tsx             ← /about
+            ├── Users.tsx             ← /users (getRouteApi, pendingComponent, staleTime)
+            ├── UserDetail.tsx        ← /users/:userId (useParams in nested component)
+            ├── Products.tsx          ← /products (useSearch, loaderDeps, activeOptions)
+            ├── Contact.tsx           ← /contact (useNavigate)
+            ├── Login.tsx             ← /login
+            └── Dashboard.tsx         ← /dashboard (beforeLoad guard in router.tsx)
 ```
 
 ---
@@ -61,39 +95,62 @@ Claude-Code/
 ## How to Resume in a New Session
 1. Read this file — you now know the current state
 2. Read `documentation/what-we-did.md` for full detail on every file built
-3. Next topic to build: **TanStack Router — remaining industry concepts** (inside `React-App-FileRouter/`)
-4. After routing is complete → **State Management** (inside `React-App/src/intermediate/`)
+3. Next topic to build: **State Management** (inside `React-App/src/intermediate/`)
+4. After state management → **Forms & Validation**
 
 ---
 
-## TanStack Router — NOT YET COVERED (do these first next session)
+## State Management — What to Build Next
 
-All work goes inside `React-App-FileRouter/src/routes/`.
+All work goes inside `React-App/src/intermediate/state-management/`.
 
 ### Must Know (do first)
 | Concept | How to implement |
 |---------|-----------------|
-| **Pending component** | Add `pendingComponent` to a route — shows spinner while loader fetches |
-| **Error component** | Add `errorComponent` to a route — per-route error boundary UI |
-| **`staleTime` on loader** | `loader: { staleTime: 5000 }` — cache loader data, avoid refetch on revisit |
-| **`useNavigate`** | Programmatic navigation after form submit or action |
-| **`useParams`** | Read dynamic params (`$userId`) from any deeply nested component |
-| **`useSearch`** | Read + update typed search params from any component |
-| **`Link` activeOptions** | Exact active matching, include search in active state |
+| **Context API** | `createContext` + `useContext` — global state without a library |
+| **useReducer** | Complex local state — action/reducer pattern (like mini-Redux) |
+| **Context + useReducer** | Combine both — the "poor man's Redux" pattern |
+| **Zustand** | `npm install zustand` — minimal global store, no boilerplate |
 
 ### Good to Know (do second)
 | Concept | How to implement |
 |---------|-----------------|
-| **Lazy routes** | `lazyRouteComponent(() => import('./HeavyPage'))` — code split |
-| **Scroll restoration** | Built-in — enable via router config |
-| **`activeOptions`** | `<Link activeOptions={{ exact: true, includeSearch: true }}>` |
+| **Zustand slices** | Split large store into domain-specific slices |
+| **Zustand with immer** | `immer` middleware — mutate draft state directly |
+| **Zustand devtools** | Redux DevTools integration for Zustand |
+| **Jotai atoms** | `npm install jotai` — atomic state, fine-grained reactivity |
 
 ### Advanced (do last)
 | Concept | How to implement |
 |---------|-----------------|
-| **Route masking** | Show different URL than actual route (modal pattern) |
-| **Parallel loaders** | Multiple loaders running simultaneously on one route |
-| **Context in loaders** | Pass auth/theme context into `loader` via `router.context` |
+| **Redux Toolkit** | `npm install @reduxjs/toolkit react-redux` — industry standard for large apps |
+| **RTK slices** | `createSlice` — actions + reducer in one file |
+| **RTK Query** | Built-in data fetching + caching layer |
+
+---
+
+## TanStack Router — All Concepts Covered ✅
+
+| Concept | File |
+|---------|------|
+| File-based routing, auto route tree | All route files |
+| Nested routes, Outlet | `users/index.tsx`, `_auth/` |
+| Dynamic segments ($param) | `users/$userId.tsx`, `products/$productId.tsx` |
+| Loader + useLoaderData | `users/`, `products/` |
+| pendingComponent | `users/index.tsx`, `users/$userId.tsx`, `products/`, `lazy-demo.tsx` |
+| errorComponent | `users/$userId.tsx`, `products/$productId.tsx` |
+| staleTime | `users/index.tsx`, `products/index.tsx` |
+| loaderDeps | `products/index.tsx` |
+| useNavigate | `login.tsx`, `contact.tsx` |
+| useSearch (typed, Zod) | `login.tsx`, `products/index.tsx` |
+| useParams (nested component) | `users/$userId.tsx`, `products/$productId.tsx` |
+| Link activeOptions (exact + includeSearch) | `__root.tsx`, `products/index.tsx` |
+| Lazy routes (lazyRouteComponent) | `lazy-demo.tsx` + `components/HeavyPage.tsx` |
+| Scroll restoration | `main.tsx` (scrollRestoration: true) |
+| Route masking | `products/index.tsx` (mask prop on Link) |
+| Parallel loaders | `products/$productId.tsx` (Promise.all) |
+| Context in loaders | `main.tsx` (context:{}), `__root.tsx` (createRootRouteWithContext), `products/index.tsx` |
+| Pathless layout + beforeLoad guard | `_auth.tsx`, `_auth/dashboard.tsx` |
 
 ---
 
@@ -123,4 +180,4 @@ cd React-App-FileRouter && npm run dev   # → http://localhost:5173
 | 2026-03-31 | Beginner — All Hooks (15+8)    | Done   |
 | 2026-03-31 | Beginner — Practice apps       | Done   |
 | 2026-03-31 | Intermediate — Advanced React  | Done   |
-| 2026-03-31 | Intermediate — Routing         | Done   |
+| 2026-03-31 | Intermediate — Routing (all)   | Done   |

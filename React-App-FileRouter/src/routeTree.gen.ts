@@ -10,16 +10,30 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as LazyDemoRouteImport } from './routes/lazy-demo'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UsersIndexRouteImport } from './routes/users/index'
+import { Route as ProductsIndexRouteImport } from './routes/products/index'
 import { Route as UsersUserIdRouteImport } from './routes/users/$userId'
+import { Route as ProductsProductIdRouteImport } from './routes/products/$productId'
 import { Route as AuthDashboardRouteImport } from './routes/_auth/dashboard'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LazyDemoRoute = LazyDemoRouteImport.update({
+  id: '/lazy-demo',
+  path: '/lazy-demo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -41,9 +55,19 @@ const UsersIndexRoute = UsersIndexRouteImport.update({
   path: '/users/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProductsIndexRoute = ProductsIndexRouteImport.update({
+  id: '/products/',
+  path: '/products/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UsersUserIdRoute = UsersUserIdRouteImport.update({
   id: '/users/$userId',
   path: '/users/$userId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductsProductIdRoute = ProductsProductIdRouteImport.update({
+  id: '/products/$productId',
+  path: '/products/$productId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthDashboardRoute = AuthDashboardRouteImport.update({
@@ -55,17 +79,25 @@ const AuthDashboardRoute = AuthDashboardRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/lazy-demo': typeof LazyDemoRoute
   '/login': typeof LoginRoute
   '/dashboard': typeof AuthDashboardRoute
+  '/products/$productId': typeof ProductsProductIdRoute
   '/users/$userId': typeof UsersUserIdRoute
+  '/products/': typeof ProductsIndexRoute
   '/users/': typeof UsersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/lazy-demo': typeof LazyDemoRoute
   '/login': typeof LoginRoute
   '/dashboard': typeof AuthDashboardRoute
+  '/products/$productId': typeof ProductsProductIdRoute
   '/users/$userId': typeof UsersUserIdRoute
+  '/products': typeof ProductsIndexRoute
   '/users': typeof UsersIndexRoute
 }
 export interface FileRoutesById {
@@ -73,9 +105,13 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
   '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/lazy-demo': typeof LazyDemoRoute
   '/login': typeof LoginRoute
   '/_auth/dashboard': typeof AuthDashboardRoute
+  '/products/$productId': typeof ProductsProductIdRoute
   '/users/$userId': typeof UsersUserIdRoute
+  '/products/': typeof ProductsIndexRoute
   '/users/': typeof UsersIndexRoute
 }
 export interface FileRouteTypes {
@@ -83,20 +119,38 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/contact'
+    | '/lazy-demo'
     | '/login'
     | '/dashboard'
+    | '/products/$productId'
     | '/users/$userId'
+    | '/products/'
     | '/users/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/login' | '/dashboard' | '/users/$userId' | '/users'
+  to:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/lazy-demo'
+    | '/login'
+    | '/dashboard'
+    | '/products/$productId'
+    | '/users/$userId'
+    | '/products'
+    | '/users'
   id:
     | '__root__'
     | '/'
     | '/_auth'
     | '/about'
+    | '/contact'
+    | '/lazy-demo'
     | '/login'
     | '/_auth/dashboard'
+    | '/products/$productId'
     | '/users/$userId'
+    | '/products/'
     | '/users/'
   fileRoutesById: FileRoutesById
 }
@@ -104,8 +158,12 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRouteWithChildren
   AboutRoute: typeof AboutRoute
+  ContactRoute: typeof ContactRoute
+  LazyDemoRoute: typeof LazyDemoRoute
   LoginRoute: typeof LoginRoute
+  ProductsProductIdRoute: typeof ProductsProductIdRoute
   UsersUserIdRoute: typeof UsersUserIdRoute
+  ProductsIndexRoute: typeof ProductsIndexRoute
   UsersIndexRoute: typeof UsersIndexRoute
 }
 
@@ -116,6 +174,20 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lazy-demo': {
+      id: '/lazy-demo'
+      path: '/lazy-demo'
+      fullPath: '/lazy-demo'
+      preLoaderRoute: typeof LazyDemoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -146,11 +218,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsersIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/products/': {
+      id: '/products/'
+      path: '/products'
+      fullPath: '/products/'
+      preLoaderRoute: typeof ProductsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/users/$userId': {
       id: '/users/$userId'
       path: '/users/$userId'
       fullPath: '/users/$userId'
       preLoaderRoute: typeof UsersUserIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/products/$productId': {
+      id: '/products/$productId'
+      path: '/products/$productId'
+      fullPath: '/products/$productId'
+      preLoaderRoute: typeof ProductsProductIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth/dashboard': {
@@ -177,8 +263,12 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRouteWithChildren,
   AboutRoute: AboutRoute,
+  ContactRoute: ContactRoute,
+  LazyDemoRoute: LazyDemoRoute,
   LoginRoute: LoginRoute,
+  ProductsProductIdRoute: ProductsProductIdRoute,
   UsersUserIdRoute: UsersUserIdRoute,
+  ProductsIndexRoute: ProductsIndexRoute,
   UsersIndexRoute: UsersIndexRoute,
 }
 export const routeTree = rootRouteImport
