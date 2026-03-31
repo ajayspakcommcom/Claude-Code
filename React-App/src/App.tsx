@@ -30,6 +30,8 @@ import UseClickOutsideDemo from "./beginner/hooks/custom/06_useClickOutside";
 import UseToggleDemo from "./beginner/hooks/custom/07_useToggle";
 import UseFormDemo from "./beginner/hooks/custom/08_useForm";
 
+import ContextReducerDemo from "./intermediate/state-management/01_ContextReducer";
+
 import ControlledVsUncontrolledDemo from "./intermediate/advanced-react/01_ControlledVsUncontrolled";
 import LiftingStateUpDemo from "./intermediate/advanced-react/02_LiftingStateUp";
 import CompositionPatternsDemo from "./intermediate/advanced-react/03_CompositionPatterns";
@@ -115,6 +117,10 @@ const App = () => {
       <section><TodoApp /></section>
       <hr />
       <section><CRUDApp /></section>
+
+      <h1>Intermediate — State Management</h1>
+      <hr />
+      <section><ContextReducerDemo /></section>
 
       <h1>Intermediate — Advanced React</h1>
       <hr />

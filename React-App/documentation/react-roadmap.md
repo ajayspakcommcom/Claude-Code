@@ -54,7 +54,7 @@
 ### State Management
 - Context + Reducer
 - Redux Toolkit
-- Async state (RTK Query / React Query)
+- Async state (RTK Query / React Query/ Tanstack Query) 
 
 ### Forms & Validation
 - React Hook Form
