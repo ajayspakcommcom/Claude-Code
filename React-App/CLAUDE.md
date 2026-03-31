@@ -23,8 +23,9 @@ Build and explore all React features that are **industry standard**, level by le
 
 ## Intermediate Progress
 - [x] Advanced React — COMPLETE (`src/intermediate/advanced-react/`)
-- [x] Routing — COMPLETE (`React-App-FileRouter/` — separate Vite project)
-- [ ] State Management — **NEXT**
+- [x] Routing — PARTIAL (`React-App-FileRouter/` — separate Vite project)
+- [ ] Routing — Remaining concepts — **NEXT (start here)**
+- [ ] State Management
 - [ ] Forms & Validation
 - [ ] Styling
 - [ ] Performance
@@ -60,10 +61,39 @@ Claude-Code/
 ## How to Resume in a New Session
 1. Read this file — you now know the current state
 2. Read `documentation/what-we-did.md` for full detail on every file built
-3. Next topic to build: **State Management** (inside `src/intermediate/`)
-   - Context + Reducer (deeper)
-   - Redux Toolkit
-   - RTK Query / React Query
+3. Next topic to build: **TanStack Router — remaining industry concepts** (inside `React-App-FileRouter/`)
+4. After routing is complete → **State Management** (inside `React-App/src/intermediate/`)
+
+---
+
+## TanStack Router — NOT YET COVERED (do these first next session)
+
+All work goes inside `React-App-FileRouter/src/routes/`.
+
+### Must Know (do first)
+| Concept | How to implement |
+|---------|-----------------|
+| **Pending component** | Add `pendingComponent` to a route — shows spinner while loader fetches |
+| **Error component** | Add `errorComponent` to a route — per-route error boundary UI |
+| **`staleTime` on loader** | `loader: { staleTime: 5000 }` — cache loader data, avoid refetch on revisit |
+| **`useNavigate`** | Programmatic navigation after form submit or action |
+| **`useParams`** | Read dynamic params (`$userId`) from any deeply nested component |
+| **`useSearch`** | Read + update typed search params from any component |
+| **`Link` activeOptions** | Exact active matching, include search in active state |
+
+### Good to Know (do second)
+| Concept | How to implement |
+|---------|-----------------|
+| **Lazy routes** | `lazyRouteComponent(() => import('./HeavyPage'))` — code split |
+| **Scroll restoration** | Built-in — enable via router config |
+| **`activeOptions`** | `<Link activeOptions={{ exact: true, includeSearch: true }}>` |
+
+### Advanced (do last)
+| Concept | How to implement |
+|---------|-----------------|
+| **Route masking** | Show different URL than actual route (modal pattern) |
+| **Parallel loaders** | Multiple loaders running simultaneously on one route |
+| **Context in loaders** | Pass auth/theme context into `loader` via `router.context` |
 
 ---
 
