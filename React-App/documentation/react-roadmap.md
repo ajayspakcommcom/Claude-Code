@@ -54,7 +54,7 @@
 ### State Management
 - Context + Reducer
 - Redux Toolkit
-- Async state (RTK Query / React Query/ Tanstack Query) 
+- Async state (RTK Query /  Tanstack Query) 
 
 ### Forms & Validation
 - React Hook Form
@@ -75,7 +75,7 @@
 - Axios / Fetch
 - Error & loading handling
 
-### Testing (Basics)
+### Testing (Basics) ✅
 - Jest
 - React Testing Library
 

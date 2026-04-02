@@ -30,7 +30,7 @@ Build and explore all React features that are **industry standard**, level by le
 - [x] Styling — COMPLETE (`01_CSSModules`, `02_StyledComponents`, `03_TailwindCSS`)
 - [x] Performance — COMPLETE (`01_MemoOptimization`, `02_CodeSplitting`)
 - [x] API Integration — COMPLETE (`01_FetchAPI`, `02_Axios`, `03_ErrorHandling`)
-- [ ] Testing (Basics)
+- [x] Testing (Basics) — COMPLETE (`src/intermediate/testing/`)
 - [ ] Practice
 
 ---
@@ -222,12 +222,57 @@ All work inside `React-App/src/intermediate/styling/`.
 
 ---
 
+## Testing (Basics) — COMPLETE ✅
+
+All work inside `React-App/src/intermediate/testing/`.
+
+| File | Concept | Status |
+|------|---------|--------|
+| `01_Jest.test.ts` | Matchers, mocks, async, pure functions | ✅ Done |
+| `02_ReactTestingLibrary.test.tsx` | render, screen, userEvent, waitFor, within | ✅ Done |
+| `03_MockingAndPatterns.test.tsx` | fetch mocking, renderHook, Context, snapshots, keyboard | ✅ Done |
+
+**Config files:** `jest.config.js`, `src/setupTests.ts`, `src/__mocks__/styleMock.js`
+
+### What each file demonstrates
+
+**01_Jest** — core Jest, no React
+- Basic matchers: `toBe`, `toEqual`, `not`, truthiness, `toBeNull`
+- Number: `toBeGreaterThan`, `toBeCloseTo` (floating point)
+- String: `toContain`, `toMatch` (regex), `toHaveLength`
+- Array: `toContain`, `expect.arrayContaining` (subset)
+- `beforeEach` / `afterEach` — reset state between tests
+- `jest.fn()` — tracks calls, `mockReturnValue`, `mockResolvedValue`, `mockReturnValueOnce`
+- Async: `async/await`, `.rejects.toThrow()`, returning a Promise
+
+**02_ReactTestingLibrary** — user-centric component testing
+- Query priority: `getByRole` → `getByLabelText` → `getByText` → `getByTestId`
+- `getBy*` (throws), `queryBy*` (null), `findBy*` (async/Promise)
+- `userEvent.setup()` + `await user.click/type`
+- `waitFor()` — retries assertion until timeout
+- `screen.findByRole()` — async element lookup
+- `within()` — scoped queries when duplicate elements exist
+
+**03_MockingAndPatterns** — real-world test patterns
+- `global.fetch = jest.fn().mockResolvedValue(...)` — mock fetch without libraries
+- `jest.spyOn(obj, "method")` — observe without replacing
+- `renderHook(() => useCounter())` — test hooks in isolation
+- `act(() => result.current.increment())` — trigger hook state updates
+- `await act(async () => ...)` — async hook side effects
+- Context: `render(<Provider value={...}><Component /></Provider>)`
+- `expect(asFragment()).toMatchSnapshot()` — saved to `__snapshots__/`
+- `expect(asFragment()).toMatchInlineSnapshot(\`...\`)` — saved inline
+- `await user.keyboard("{Enter}")` — keyboard event simulation
+
+---
+
 ## Tech Stack
 - React 18, TypeScript 5, Webpack 5
 - @reduxjs/toolkit, react-redux (Redux Toolkit + RTK Query)
 - @tanstack/react-query, @tanstack/react-query-devtools (TanStack Query)
 - TanStack Router (routing — in React-App-FileRouter / React-App-CodeRouter)
 - Zod (search param validation)
+- Jest + ts-jest, @testing-library/react, @testing-library/user-event, @testing-library/jest-dom
 
 ---
 
@@ -255,3 +300,4 @@ cd React-App-CodeRouter && npm run dev   # → http://localhost:5173
 | 2026-03-31 | Intermediate — Advanced React      | Done   |
 | 2026-03-31 | Intermediate — Routing (all)       | Done   |
 | 2026-03-31 | Intermediate — State Management    | Done   |
+| 2026-04-02 | Intermediate — Testing (Basics)    | Done   |

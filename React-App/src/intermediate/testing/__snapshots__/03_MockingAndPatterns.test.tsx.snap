@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`5 — Snapshot testing matches snapshot — fails if UI changes unexpectedly 1`] = `
+<DocumentFragment>
+  <span
+    style="background: rgb(74, 144, 226); padding: 2px 8px; border-radius: 12px;"
+  >
+    Admin
+  </span>
+</DocumentFragment>
+`;
