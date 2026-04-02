@@ -877,7 +877,94 @@ auth-app/
 ⬜ Practice #3 — Pagination, filters, search
 ```
 
-After Practice → **Senior level begins**.
+### ✅ INTERMEDIATE — Practice #2 — Dashboard with Charts (Complete)
+
+All files in `src/intermediate/practice/dashboard-app/`
+
+#### Architecture
+```
+dashboard-app/
+├── types.ts                        ← DateRange, KPIMetric, TimeSeriesPoint, TrafficSource, etc.
+├── api/
+│   └── dashboardApi.ts             ← Seeded mock data generator — different data per date range
+├── hooks/
+│   └── useDashboard.ts             ← React Query master hook + 7 derived hooks per data concern
+└── components/
+    ├── KPICard.tsx                 ← Metric card with sparkline AreaChart + trend badge
+    ├── RevenueChart.tsx            ← AreaChart — revenue/expenses/profit time series
+    ├── SalesBarChart.tsx           ← BarChart — grouped this year vs last year
+    ├── TrafficPieChart.tsx         ← PieChart (donut) — traffic sources
+    ├── UserGrowthChart.tsx         ← LineChart — new/returning/churned users
+    └── TopProductsTable.tsx        ← Sortable data table with useMemo
+DashboardApp.tsx                    ← Root: QueryClientProvider + date range picker + dark mode
+```
+
+#### Recharts concepts covered (15 total)
+
+| Concept | File | Detail |
+|---------|------|--------|
+| `ResponsiveContainer` | All charts | Fills parent width automatically — never set fixed px width |
+| `AreaChart` + `linearGradient` | RevenueChart, KPICard | Gradient fill fades to transparent at bottom |
+| Multi-series Area | RevenueChart | revenue, expenses, profit on one chart — toggle each via legend |
+| `BarChart` grouped | SalesBarChart | `barCategoryGap` + `barGap` control spacing within groups |
+| `Cell` | SalesBarChart | Color individual bars differently — current month highlighted blue |
+| `ReferenceLine` | SalesBarChart, UserGrowthChart | Horizontal avg line, vertical event marker |
+| `ReferenceArea` | UserGrowthChart | Shaded background region ("recent period") |
+| `PieChart` + `innerRadius` | TrafficPieChart | `innerRadius > 0` = donut, `= 0` = solid pie |
+| `activeShape` + `Sector` | TrafficPieChart | Custom enlarged + ring accent on hover slice |
+| `LineChart` + `strokeDasharray` | UserGrowthChart | Dashed line for churned (visually signals negative metric) |
+| `CartesianGrid` | All charts | `vertical={false}` — only horizontal lines (cleaner look) |
+| `XAxis` / `YAxis` + `tickFormatter` | All charts | Format axis labels ($100K, 1.5K) without full numbers |
+| Custom `Tooltip` | All charts | Styled card with formatted values, dark mode aware |
+| Custom `Legend` | RevenueChart | Clickable buttons to show/hide each series |
+| `dot={false}` / `activeDot` | Line + Area | No dots on line (cleaner for dense data), dot only on hover |
+
+#### React Query patterns
+
+| Pattern | Detail |
+|---------|--------|
+| `placeholderData: (prev) => prev` | Old data stays visible when switching 7d → 30d — no blank flash |
+| `refetchInterval: 5 * 60_000` | Auto-refresh every 5 min — live dashboard feel |
+| `staleTime: 60_000` | Fresh for 60s — avoids unnecessary refetches on tab focus |
+| Derived hooks | `useKPIs`, `useTimeSeries`, `useTraffic` etc. — components subscribe to only what they need |
+| Shared `queryKey: ["dashboard", range]` | All derived hooks share the same cache entry |
+
+#### Other production patterns
+
+| Pattern | File | Detail |
+|---------|------|--------|
+| Seeded random data | `dashboardApi.ts` | `Math.sin(seed)` — same range always produces same data (stable) |
+| KPI formatters | `KPICard.tsx` | `currency` ($1.2M), `number` (4.8K), `percent` (3.68%) |
+| Sparkline in card | `KPICard.tsx` | Mini 48px AreaChart inside each KPI card |
+| Trend badge | `KPICard.tsx` | Green ▲ / Red ▼ badge with % change vs prev period |
+| `useMemo` sort | `TopProductsTable.tsx` | Re-sorts only when data or sortKey/direction changes |
+| Sort toggle | `TopProductsTable.tsx` | Click header: same column → flip direction, new column → desc |
+| `Cell` highlight | `SalesBarChart.tsx` | Current month rendered darker blue than other months |
+| Active donut slice | `TrafficPieChart.tsx` | `activeShape` renders enlarged sector + outer ring accent |
+| Dark mode | `DashboardApp.tsx` | `dark` prop propagated to all charts — no Context needed at this scale |
+| Date range picker | `DashboardApp.tsx` | Controls ALL charts simultaneously via shared `range` state |
+| ChartSkeleton | `RevenueChart.tsx` | Shared loading placeholder exported and reused across chart files |
+
+---
+
+## What's Next
+
+### Remaining Intermediate sections
+```
+✅ Advanced React
+✅ Routing (File-based + Code-based)
+✅ State Management
+✅ Forms & Validation
+✅ Styling
+✅ Performance
+✅ API Integration
+✅ Testing (Basics + Enterprise)
+✅ Practice #1 — Auth-based app
+✅ Practice #2 — Dashboard with charts
+⬜ Practice #3 — Pagination, filters, search  ← NEXT
+```
+
+After Practice #3 → **Senior level begins**.
 
 ---
 

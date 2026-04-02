@@ -33,8 +33,8 @@ Build and explore all React features that are **industry standard**, level by le
 - [x] Testing (Basics + Enterprise) — COMPLETE (`src/intermediate/testing/`)
 - [ ] Practice
   - [x] Auth-based app — COMPLETE (`src/intermediate/practice/auth-app/`)
-  - [ ] Dashboard with charts  ← NEXT
-  - [ ] Pagination, filters, search
+  - [x] Dashboard with charts — COMPLETE (`src/intermediate/practice/dashboard-app/`)
+  - [ ] Pagination, filters, search  ← NEXT
 
 ---
 

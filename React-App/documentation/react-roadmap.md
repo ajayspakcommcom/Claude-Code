@@ -82,7 +82,7 @@
 
 ### Practice
 - Auth-based app ✅
-- Dashboard with charts
+- Dashboard with charts ✅
 - Pagination, filters, search
 
 ---
