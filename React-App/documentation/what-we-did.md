@@ -633,6 +633,254 @@ Installed: `npm install axios`
 
 ---
 
+### ✅ INTERMEDIATE — Testing (Complete — Basics + Enterprise)
+
+All files in `src/intermediate/testing/`
+
+#### Config files
+| File | Purpose |
+|------|---------|
+| `jest.config.js` | ts-jest preset, jsdom env, setupFilesAfterEnv, moduleNameMapper for CSS, coverage thresholds |
+| `src/setupTests.ts` | `@testing-library/jest-dom` + `cross-fetch/polyfill` (makes fetch available in jsdom for MSW) |
+| `src/__mocks__/styleMock.js` | Returns `{}` for CSS module imports so they don't crash in Jest |
+
+#### Packages installed
+```bash
+npm install --save-dev jest ts-jest jest-environment-jsdom @testing-library/react @testing-library/user-event @testing-library/jest-dom @types/jest msw@1 jest-axe @types/jest-axe cross-fetch @playwright/test
+```
+
+---
+
+#### 01_Jest.test.ts — Core Jest (no React)
+
+| Concept | Detail |
+|---------|--------|
+| Basic matchers | `toBe`, `toEqual`, `not`, truthiness, `toBeNull` |
+| Number matchers | `toBeGreaterThan`, `toBeCloseTo` (floating point safe) |
+| String matchers | `toContain`, `toMatch(regex)`, `toHaveLength` |
+| Array matchers | `toContain`, `expect.arrayContaining` (subset match) |
+| Lifecycle | `beforeEach` / `afterEach` — reset state between tests |
+| `jest.fn()` | Track calls, `mockReturnValue`, `mockResolvedValue`, `mockReturnValueOnce` |
+| Async | `async/await`, `.rejects.toThrow()`, returning a Promise |
+
+---
+
+#### 02_ReactTestingLibrary.test.tsx — User-centric component testing
+
+| Concept | Detail |
+|---------|--------|
+| Query priority | `getByRole` → `getByLabelText` → `getByText` → `getByTestId` |
+| Query variants | `getBy*` (throws), `queryBy*` (null), `findBy*` (async/Promise) |
+| `userEvent.setup()` | `await user.click/type` — simulates real browser events |
+| `waitFor()` | Retries assertion until timeout passes |
+| `screen.findByRole()` | Async element lookup |
+| `within()` | Scoped queries when duplicate elements exist |
+
+---
+
+#### 03_MockingAndPatterns.test.tsx — Real-world test patterns
+
+| Concept | Detail |
+|---------|--------|
+| Fetch mocking | `global.fetch = jest.fn().mockResolvedValue(...)` — no MSW needed for simple tests |
+| `jest.spyOn()` | Observe without replacing |
+| `renderHook()` | Test hooks in isolation |
+| `act()` | Trigger hook state updates |
+| Context testing | `render(<Provider value={...}><Component /></Provider>)` |
+| Snapshots | `expect(asFragment()).toMatchSnapshot()` — saved to `__snapshots__/` |
+| Inline snapshots | `expect(asFragment()).toMatchInlineSnapshot(\`...\`)` — saved in test file |
+| Keyboard | `await user.keyboard("{Enter}")` |
+
+---
+
+#### 04_CustomRender.tsx — Enterprise test utilities (no tests, just helpers)
+
+| Export | Purpose |
+|--------|---------|
+| `createTestQueryClient()` | `retry: false`, `staleTime: Infinity`, `gcTime: Infinity` — prevents flaky test retries |
+| `createTestStore(reducers, preloadedState)` | `configureStore` wrapper |
+| `AllProviders` | Redux Provider + QueryClientProvider combined |
+| `renderWithProviders(ui, options)` | Drop-in replacement for `render()` — returns `{ store, queryClient, ...queries }` |
+| `createWrapper(options)` | Returns a wrapper component — for `renderHook` |
+
+---
+
+#### 05_CustomRender.test.tsx — Tests for the custom render utility
+
+| Test | Concept |
+|------|---------|
+| Default Redux state | `renderWithProviders` works with no options |
+| Preloaded state | `preloadedState: { counter: { value: 42 } }` — seed Redux before render |
+| Direct `store.dispatch` | Assert state changes after dispatching actions in test |
+| React Query cache seeding | `queryClient.setQueryData(["user", 1], data)` — skip network call entirely |
+| `renderHook` + `createWrapper` | Test a hook that uses React Query |
+
+---
+
+#### 06_MSW.test.tsx — Mock Service Worker (network-level mocking)
+
+MSW v1 (`msw@1`) — CJS-compatible, works with Jest + ts-jest.
+
+| Concept | Detail |
+|---------|--------|
+| `setupServer(...handlers)` | Define mock API at network level — component code unchanged |
+| `rest.get/post(url, handler)` | Match by method + URL |
+| `req.params` | Dynamic route segments: `/api/users/:id` → `req.params.id` |
+| `req.json()` | Read request body |
+| `beforeAll/afterEach/afterAll` | `listen()` / `resetHandlers()` / `close()` lifecycle |
+| Per-test override | `server.use(rest.get(...))` — override for one test, reset restores default |
+| Error simulation | `ctx.status(500)` for server errors, `res.networkError("msg")` for network failures |
+
+---
+
+#### 07_IntegrationTests.test.tsx — Full user flow testing
+
+**Demo:** TodoApp with optimistic updates + rollback
+
+| Test group | What it covers |
+|------------|---------------|
+| Load flow | Component renders, MSW serves data, todos appear on screen |
+| Add flow | User types + submits, optimistic add, server confirm, rollback on 500 |
+| Delete flow | `within()` scoping to find delete button in a specific list item |
+| Toggle flow | Check/uncheck, visual class change, server sync |
+
+Key: Reset `mockTodos` array in `afterEach` (alongside `server.resetHandlers()`) to prevent test pollution.
+
+---
+
+#### 08_ReduxTesting.test.ts — 3-layer Redux testing strategy
+
+| Layer | What | How |
+|-------|------|-----|
+| Reducer | Pure functions | `reducer(state, action)` → assert new state directly |
+| Selectors | `createSelector` | `selector(mockState)` → assert return value |
+| Async thunks | `createAsyncThunk` | Dispatch against real store, assert pending/fulfilled/rejected transitions |
+
+Fix: `reducer: { cart: cartSlice.reducer, auth: authSlice.reducer } as any` — RTK v2 type quirk.
+
+---
+
+#### 09_ReactQueryTesting.test.tsx — Testing React Query hooks + components
+
+| Concept | Detail |
+|---------|--------|
+| `createWrapper()` | Wraps with `QueryClientProvider` for `renderHook` |
+| `queryClient.setQueryData()` | Pre-seed cache — component renders with data, no network call |
+| `useQuery` states | Loading → success → error (override handler per test) |
+| `useMutation` + `invalidateQueries` | Mutation fires, then list refetches — assert both |
+| `renderHook(() => usePostsHook())` | Test custom query hooks in isolation |
+
+---
+
+#### 10_Accessibility.test.tsx — jest-axe automated a11y testing
+
+| Concept | Detail |
+|---------|--------|
+| `expect.extend(toHaveNoViolations)` | Extends Jest with `toHaveNoViolations()` matcher |
+| `await axe(container)` | Runs axe-core engine against rendered HTML |
+| `toHaveNoViolations()` | Fails test if any a11y rule is violated |
+| Accessible patterns | `aria-label` on nav, `htmlFor` on labels, `scope="col"` on `<th>`, `aria-labelledby` on dialogs |
+| Violation detection | `results.violations.map(v => v.id)` — check exact rule IDs (`"button-name"`, `"image-alt"`) |
+| Scoped axe | `axe(container.querySelector("main")!)` — test sub-element only |
+
+**Rule:** Run `toHaveNoViolations()` on every component shipped to production.
+
+---
+
+#### playwright.config.ts + e2e/todo.spec.ts — E2E with Playwright
+
+| Concept | Detail |
+|---------|--------|
+| `playwright.config.ts` | `testDir: "./e2e"`, `fullyParallel: true`, `retries: CI ? 1 : 0`, screenshot/video/trace on failure |
+| Page Object Model | `TodoPage` class encapsulates locators + actions — tests call `page.addTodo("text")` |
+| `page.route()` | Network interception — mock API responses in E2E tests |
+| `page.waitForResponse()` | Wait for specific API call before asserting |
+| `toHaveScreenshot()` | Visual regression — pixel comparison against baseline |
+| Auth flow | `page.goto("/login")`, fill form, assert redirect to `/dashboard` |
+| Mobile viewport | `page.setViewportSize({ width: 375, height: 812 })` |
+
+Tests commented out (require live server at `http://localhost:3000`).
+
+**Final result: 120/120 tests passing across 9 test suites.**
+
+---
+
+### ✅ INTERMEDIATE — Practice #1 — Auth-Based App (Complete)
+
+All files in `src/intermediate/practice/auth-app/`
+
+#### Architecture
+```
+auth-app/
+├── types.ts                  ← All shared types (User, Role, AuthState, TokenPair, Page)
+├── store/
+│   ├── authSlice.ts          ← JWT state, 4 async thunks, localStorage persistence, selectors
+│   └── store.ts              ← configureStore + typed useAppDispatch/useAppSelector
+├── api/
+│   ├── client.ts             ← Axios instance + request interceptor (Bearer) + 401 silent refresh
+│   └── authApi.ts            ← Mock login/register/getMe/refresh/logout/updateProfile/changePassword
+├── hooks/
+│   └── useAuth.ts            ← Single hook — all auth state + actions (decouples components from Redux)
+├── components/
+│   └── ProtectedRoute.tsx    ← ProtectedRoute (auth guard) + RoleGuard (RBAC)
+├── pages/
+│   ├── LoginPage.tsx         ← RHF + Zod, remember me, password toggle, setError("root")
+│   ├── RegisterPage.tsx      ← Cross-field refine, password strength meter, criteriaMode: "all"
+│   ├── DashboardPage.tsx     ← React Query, skeleton loading, role-based panels, useMemo
+│   └── ProfilePage.tsx       ← Two RHF forms, optimistic update + rollback, isDirty, toasts
+└── AuthApp.tsx               ← Root: Provider + QueryClientProvider + session restore + navbar
+```
+
+#### Production patterns covered
+
+| Pattern | File | Detail |
+|---------|------|--------|
+| JWT access + refresh tokens | `authSlice.ts` | Short-lived access (15 min) + long-lived refresh, stored in localStorage |
+| Silent token refresh on 401 | `api/client.ts` | Axios interceptor: pause → refresh → retry. Request queue prevents multiple parallel refreshes |
+| `rejectWithValue` | `authSlice.ts` | Server error message ("Invalid email or password") surfaced to UI |
+| `restoreSessionThunk` | `authSlice.ts` | On app load, call /auth/me if token exists → re-authenticate without login |
+| `injectStore` | `api/client.ts` + `AuthApp.tsx` | Passes Redux dispatch to Axios interceptor (breaks circular import) |
+| `useAuth` hook | `hooks/useAuth.ts` | Components never import from Redux directly — swap state library with no component changes |
+| RBAC | `components/ProtectedRoute.tsx` | `RoleGuard role="admin"` renders access-denied UI for wrong roles |
+| Zod cross-field `.refine()` | `RegisterPage.tsx` | `password === confirmPassword` validated at schema level |
+| Password strength meter | `RegisterPage.tsx` | Score 0–4 based on length/uppercase/number/special char — color-coded bar |
+| `criteriaMode: "all"` | `RegisterPage.tsx` | Show ALL password errors simultaneously (not just the first) |
+| Optimistic update + rollback | `ProfilePage.tsx` | `patchUser()` updates Redux instantly → API call → rollback if it fails |
+| `isDirty` guard | `ProfilePage.tsx` | "Save" button disabled until user changes a field |
+| Toast notifications | `ProfilePage.tsx` | Per-form success/error with auto-dismiss after 4 seconds |
+| Skeleton loading | `DashboardPage.tsx` | Bone layout shown while React Query fetches — better than spinner |
+| Role-based UI panels | `DashboardPage.tsx` | Admin panel, moderator panel, user panel — conditionally rendered |
+| `useMemo` for derived data | `DashboardPage.tsx` | Sort activity list — recalculates only when stats change |
+| State-based router | `AuthApp.tsx` | `currentPage` state replaces router library — same concept as React Router |
+
+#### Demo accounts
+- `admin@example.com` / `Admin123!` → role: admin (sees Admin Panel + Admin page in nav)
+- `user@example.com` / `User123!` → role: user
+- `mod@example.com` / `Mod123!` → role: moderator
+
+---
+
+## What's Next
+
+### Remaining Intermediate sections
+```
+✅ Advanced React
+✅ Routing (File-based + Code-based)
+✅ State Management
+✅ Forms & Validation
+✅ Styling
+✅ Performance
+✅ API Integration
+✅ Testing (Basics + Enterprise)
+✅ Practice #1 — Auth-based app
+⬜ Practice #2 — Dashboard with charts  ← NEXT
+⬜ Practice #3 — Pagination, filters, search
+```
+
+After Practice → **Senior level begins**.
+
+---
+
 ## Git & GitHub
 - Remote: https://github.com/ajayspakcommcom/Claude-Code.git
 - Branch: `main`

@@ -75,12 +75,13 @@
 - Axios / Fetch
 - Error & loading handling
 
-### Testing (Basics) ✅
-- Jest
-- React Testing Library
+### Testing (Basics + Enterprise) ✅
+- Jest, React Testing Library
+- MSW, Integration Tests, Redux Testing, React Query Testing
+- jest-axe (Accessibility), Playwright E2E
 
 ### Practice
-- Auth-based app
+- Auth-based app ✅
 - Dashboard with charts
 - Pagination, filters, search
 

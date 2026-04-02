@@ -30,8 +30,11 @@ Build and explore all React features that are **industry standard**, level by le
 - [x] Styling — COMPLETE (`01_CSSModules`, `02_StyledComponents`, `03_TailwindCSS`)
 - [x] Performance — COMPLETE (`01_MemoOptimization`, `02_CodeSplitting`)
 - [x] API Integration — COMPLETE (`01_FetchAPI`, `02_Axios`, `03_ErrorHandling`)
-- [x] Testing (Basics) — COMPLETE (`src/intermediate/testing/`)
+- [x] Testing (Basics + Enterprise) — COMPLETE (`src/intermediate/testing/`)
 - [ ] Practice
+  - [x] Auth-based app — COMPLETE (`src/intermediate/practice/auth-app/`)
+  - [ ] Dashboard with charts  ← NEXT
+  - [ ] Pagination, filters, search
 
 ---
 
