@@ -1053,7 +1053,8 @@ All Intermediate topics are now complete!
    ✅ Architecture #3 — Reusable Component Libraries
    ✅ Architecture #4 — Design Systems
    ✅ Advanced State #1 — Server vs Client State
-   ⬜ Advanced State #2 — Caching Strategies  ← NEXT
+   ✅ Advanced State #2 — Caching Strategies
+   ⬜ Advanced State #3 — Optimistic Updates  ← NEXT
    ⬜ Advanced State
    ⬜ Performance (Deep)
    ⬜ Advanced Patterns
@@ -1245,6 +1246,25 @@ Files: `src/senior/advanced-state/01_ServerVsClientState.tsx` + `server-vs-clien
 
 #### Key mistake shown
 Using `useState + useEffect` for server data: no caching, no background sync, 3 components = 3 duplicate requests, 30+ lines of boilerplate. React Query solves all of it in 4 lines.
+
+### ✅ Advanced State #2 — Caching Strategies (Complete)
+
+Files: `src/senior/advanced-state/02_CachingStrategies.tsx` + `caching/fakeCacheApi.ts`
+
+#### The Two Controls
+
+| Control | Default | What it does |
+|---------|---------|-------------|
+| `staleTime` | `0` | How long data is FRESH. While fresh = no background refetch. After = refetches on next mount/focus |
+| `gcTime` | `5min` | How long UNUSED data stays in memory after component unmounts. After = garbage collected |
+
+#### 3 tabs in the demo
+
+| Tab | What it shows |
+|-----|--------------|
+| **Concepts** | staleTime vs gcTime side-by-side; 5-step cache lifecycle (Loading → Fresh → Stale → Inactive → Deleted); query key = cache key examples (`["posts"]` vs `["posts", "tech"]` vs `["posts", 5]`) |
+| **staleTime Demo** | 3 live panels — `staleTime: 0`, `15 000ms`, `Infinity` — each shows data age counter, fresh/stale badge, fetch count, and isFetching indicator. "Simulate re-mount" button unmounts/remounts all three — instantly visible which ones refetch vs serve from cache |
+| **Patterns** | 3 sub-tabs: **Invalidation** (mutation → `invalidateQueries` → auto-refetch with live event log), **Prefetch** (hover a list item → `prefetchQuery` in background → click = instant, zero loading), **Dependent** (`enabled: category !== ""` — query stays idle until condition is true) |
 
 ---
 

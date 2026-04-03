@@ -44,7 +44,8 @@ Build and explore all React features that are **industry standard**, level by le
 - [x] Architecture #3 — Reusable Component Libraries — COMPLETE (`src/senior/architecture/component-library/`)
 - [x] Architecture #4 — Design Systems — COMPLETE (`src/senior/architecture/design-system/`)
 - [x] Advanced State #1 — Server vs Client State — COMPLETE (`src/senior/advanced-state/`)
-- [ ] Advanced State #2 — Caching Strategies ← NEXT
+- [x] Advanced State #2 — Caching Strategies — COMPLETE (`src/senior/advanced-state/`)
+- [ ] Advanced State #3 — Optimistic Updates ← NEXT
 
 ---
 

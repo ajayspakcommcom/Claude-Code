@@ -99,7 +99,7 @@
 
 ### Advanced State
 - ✅ Server vs client state
-- Caching strategies
+- ✅ Caching strategies
 - Optimistic updates
 
 ### Performance (Deep)
