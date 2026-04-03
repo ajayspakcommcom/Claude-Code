@@ -1310,6 +1310,58 @@ File: `src/senior/performance/01_RenderProfiling.tsx`
 - **Column C** (memo + useCallback): only the card whose data actually changed flashes — the other 3 stay still
 - **useMemo section**: two computation panels — "Change unrelated state" makes the raw version recompute every time, the memo'd version stays frozen at the same count
 
+### ✅ Performance #2 — Virtualization (Complete)
+
+File: `src/senior/performance/02_Virtualization.tsx`
+
+#### The problem
+Rendering 10,000 DOM nodes at once causes:
+- Long paint time (500ms+) — browser lays out all nodes even if only 8 are visible
+- Massive memory usage — every node lives in the DOM tree
+- Janky scroll — layout thrashing on every frame
+
+#### The solution — windowed rendering
+Only render the items that are currently visible in the scroll container, plus a small **overscan** buffer above and below. As the user scrolls, swap in new items and remove old ones.
+
+#### `useVirtualList` hook
+```tsx
+const useVirtualList = (containerRef, itemCount) => {
+  const [scrollTop, setScrollTop] = useState(0);
+  useEffect(() => {
+    const el = containerRef.current;
+    const onScroll = () => setScrollTop(el.scrollTop);
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, [containerRef]);
+  const startIndex = Math.max(0, Math.floor(scrollTop / ITEM_HEIGHT) - OVERSCAN);
+  const endIndex = Math.min(itemCount - 1, Math.ceil((scrollTop + CONTAINER_HEIGHT) / ITEM_HEIGHT) + OVERSCAN);
+  return { startIndex, endIndex, totalHeight: itemCount * ITEM_HEIGHT, ... };
+};
+```
+
+| Constant | Value | Purpose |
+|----------|-------|---------|
+| `ITEM_HEIGHT` | 56px | Fixed height — required for index math |
+| `CONTAINER_HEIGHT` | 440px | Visible scroll window |
+| `OVERSCAN` | 4 | Extra rows above/below visible area (prevents blank flash on fast scroll) |
+| `VIRTUAL_COUNT` | 10,000 | Total logical items |
+
+#### Key implementation details
+- **Spacer div** at `totalHeight` (10,000 × 56 = 560,000px) — gives the scrollbar the correct proportions
+- **Absolute positioning** — each visible row at `top: index * ITEM_HEIGHT`; the container is `position: relative`
+- **`getItem(i)`** — deterministic data function (no `useState` array) — generates item data from index using modulo arrays; avoids storing 10k objects in memory
+- **`{ passive: true }`** on scroll listener — tells browser the handler won't call `preventDefault`, enabling scroll optimisations
+- **`Row = memo(...)`** — prevents re-renders of unchanged visible rows when `scrollTop` changes
+
+#### Live demo — side-by-side comparison
+- **NaiveList** (500 items cap): measures paint time via `performance.now()` before/after render, counts DOM nodes via `querySelectorAll("[data-row]")` — shows ~500 nodes
+- **VirtualList** (10,000 items): same metrics — shows ~14 DOM nodes regardless of total count, near-zero paint time after first mount
+- Scrolling VirtualList → node count stays constant while the displayed names change
+
+#### When to virtualise
+- Lists > 100–200 items where items are visible simultaneously
+- **Not needed** for paginated lists, infinite scroll with small pages, or short lists
+
 ---
 
 ## Git & GitHub

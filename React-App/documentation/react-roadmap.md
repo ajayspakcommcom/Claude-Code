@@ -104,7 +104,7 @@
 
 ### Performance (Deep)
 - ✅ Render profiling
-- Virtualization (large lists)
+- ✅ Virtualization (large lists)
 - Web Vitals
 - Bundle analysis
 
