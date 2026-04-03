@@ -93,7 +93,7 @@
 
 ### Architecture
 - ✅ Feature-based folder structure
-- Separation of concerns
+- ✅ Separation of concerns
 - Reusable component libraries
 - Design systems
 

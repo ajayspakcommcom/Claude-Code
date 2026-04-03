@@ -1048,8 +1048,9 @@ All Intermediate topics are now complete!
 
 ✅ Senior (Architecture & Scale) — IN PROGRESS
    ✅ Architecture #1 — Feature-Based Folder Structure
-   ⬜ Architecture #2 — Separation of Concerns  ← NEXT
-   ⬜ Architecture #3 — Reusable Component Libraries
+   ✅ Architecture #2 — Separation of Concerns
+   ⬜ Architecture #3 — Reusable Component Libraries  ← NEXT
+   ⬜ Architecture #3 — Reusable Component Libraries  ← NEXT
    ⬜ Architecture #4 — Design Systems
    ⬜ Advanced State
    ⬜ Performance (Deep)
@@ -1102,6 +1103,46 @@ src/senior/architecture/
 | **Feature isolation** | Features never import each other's internals — app root wires via props |
 | **Shared = 2+ features** | Button used by 3 features → shared. LoginButton only auth → stays in auth/ |
 | **Co-location** | `LoginForm.tsx` + `LoginForm.test.tsx` live in the same `auth/` folder |
+
+### ✅ Architecture #2 — Separation of Concerns (Complete)
+
+All files in `src/senior/architecture/02_SeparationOfConcerns.tsx` + `src/senior/architecture/soc/`
+
+#### The 4 Layers
+
+| Layer | File(s) | Has React? | Changes when |
+|-------|---------|-----------|--------------|
+| **1 — Types** | `soc/types.ts` | ❌ None | Data model changes |
+| **2 — Service** | `soc/services/taskService.ts` | ❌ None | Data source changes (REST → GraphQL) |
+| **3 — Hooks** | `soc/hooks/useTasks|useTaskFilters|useTaskForm` | ✅ useState/useCallback | Business rules change |
+| **4 — Components** | `soc/components/TaskCard|TaskList|TaskForm|TaskFiltersBar` | ✅ JSX only | UI design changes |
+
+#### Key insight
+Each layer has **one reason to change**. Swap REST for GraphQL → only `taskService.ts` changes. Redesign the UI → only the components change. Change validation rules → only the hooks change.
+
+#### Files built
+
+| File | Responsibility |
+|------|---------------|
+| `soc/types.ts` | Task, TaskFormData, TaskFilters interfaces + DEFAULT_FILTERS, EMPTY_FORM constants |
+| `soc/services/taskService.ts` | `getAll(filters)`, `create`, `update`, `delete`, `toggle`, `getStats` — pure TS, zero React |
+| `soc/hooks/useTasks.ts` | Connects service to React; exposes `tasks`, `stats`, `createTask`, `deleteTask`, `toggleTask` |
+| `soc/hooks/useTaskFilters.ts` | Filter state; `setSearch/Status/Priority/SortBy`, `resetFilters`, derived `activeCount` |
+| `soc/hooks/useTaskForm.ts` | Form state + validation; `setField`, `handleSubmit` (validates then calls `onSubmit`), `reset` |
+| `soc/components/TaskCard.tsx` | Renders one task — checkbox toggle, priority/status badges, tags, delete button |
+| `soc/components/TaskList.tsx` | Renders task list or empty state |
+| `soc/components/TaskFilters.tsx` | Search input + status/priority/sort selects + active-filter reset |
+| `soc/components/TaskForm.tsx` | Add-task form — fields, error display, submit/cancel |
+| `02_SeparationOfConcerns.tsx` | Two-tab demo: **Layers** (before/after code + 4 layer cards) + **Live Demo** (working Task Manager) |
+
+#### Live demo features
+- 8 seeded tasks (CI/CD, tests, design audit, arch migration…)
+- Stats bar: total / todo / in-progress / done
+- Add Task form with validation (title required, due date required)
+- Search by title, description, or tag
+- Filter by status + priority; sort by due date / priority / created
+- Checkbox toggle (todo ↔ done), delete task
+- Active filter count + reset button
 
 ---
 
