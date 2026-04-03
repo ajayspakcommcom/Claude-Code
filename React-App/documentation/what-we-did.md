@@ -1054,7 +1054,8 @@ All Intermediate topics are now complete!
    ✅ Architecture #4 — Design Systems
    ✅ Advanced State #1 — Server vs Client State
    ✅ Advanced State #2 — Caching Strategies
-   ⬜ Advanced State #3 — Optimistic Updates  ← NEXT
+   ✅ Advanced State #3 — Optimistic Updates
+   ⬜ Performance (Deep) — Render Profiling  ← NEXT
    ⬜ Advanced State
    ⬜ Performance (Deep)
    ⬜ Advanced Patterns
@@ -1265,6 +1266,27 @@ Files: `src/senior/advanced-state/02_CachingStrategies.tsx` + `caching/fakeCache
 | **Concepts** | staleTime vs gcTime side-by-side; 5-step cache lifecycle (Loading → Fresh → Stale → Inactive → Deleted); query key = cache key examples (`["posts"]` vs `["posts", "tech"]` vs `["posts", 5]`) |
 | **staleTime Demo** | 3 live panels — `staleTime: 0`, `15 000ms`, `Infinity` — each shows data age counter, fresh/stale badge, fetch count, and isFetching indicator. "Simulate re-mount" button unmounts/remounts all three — instantly visible which ones refetch vs serve from cache |
 | **Patterns** | 3 sub-tabs: **Invalidation** (mutation → `invalidateQueries` → auto-refetch with live event log), **Prefetch** (hover a list item → `prefetchQuery` in background → click = instant, zero loading), **Dependent** (`enabled: category !== ""` — query stays idle until condition is true) |
+
+### ✅ Advanced State #3 — Optimistic Updates (Complete)
+
+Files: `src/senior/advanced-state/03_OptimisticUpdates.tsx` + `optimistic/fakeOptimisticApi.ts`
+
+#### The 3-Phase Pattern
+
+| Phase | Fires when | What it does |
+|-------|-----------|-------------|
+| `onMutate` | Before request | `cancelQueries` → snapshot previous → `setQueryData` (optimistic) → return snapshot |
+| `onError` | Request fails | `setQueryData(context.previous)` — roll back to snapshot |
+| `onSettled` | After success OR error | `invalidateQueries` — always re-sync with server truth |
+
+#### Live Demo features
+- **5 posts** with like, inline edit, delete — all 3 with full optimistic pattern
+- **Chaos mode toggle** — forces every mutation to fail → watch the rollback happen in real-time (like count reverts, deleted post reappears, edited title bounces back)
+- **Toast notifications** on rollback + chaos mode state changes
+- **Annotation panel** at bottom showing the `setQueryData` logic for each mutation type
+
+#### Key rule
+Always `cancelQueries` in `onMutate` — if a background refetch completes after your optimistic update, it overwrites your change. Cancelling prevents that race condition.
 
 ---
 

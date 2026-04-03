@@ -100,7 +100,7 @@
 ### Advanced State
 - ✅ Server vs client state
 - ✅ Caching strategies
-- Optimistic updates
+- ✅ Optimistic updates
 
 ### Performance (Deep)
 - Render profiling
