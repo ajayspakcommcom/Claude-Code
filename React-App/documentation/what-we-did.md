@@ -1362,6 +1362,71 @@ const useVirtualList = (containerRef, itemCount) => {
 - Lists > 100–200 items where items are visible simultaneously
 - **Not needed** for paginated lists, infinite scroll with small pages, or short lists
 
+### ✅ Performance #3 — Web Vitals (Complete)
+
+File: `src/senior/performance/03_WebVitals.tsx`
+
+#### Core Web Vitals (the three Google tracks for SEO)
+
+| Metric | Full Name | Measures | Good threshold |
+|--------|-----------|----------|---------------|
+| LCP | Largest Contentful Paint | How fast does main content load? | < 2.5s |
+| INP | Interaction to Next Paint | How fast does page respond to input? | < 200ms |
+| CLS | Cumulative Layout Shift | Does content jump around? | < 0.1 |
+
+#### Supporting metrics
+
+| Metric | Full Name | Good threshold |
+|--------|-----------|---------------|
+| FCP | First Contentful Paint | < 1.8s |
+| TTFB | Time to First Byte | < 800ms |
+
+#### The `web-vitals` library
+```ts
+import { onLCP, onINP, onCLS, onFCP, onTTFB } from 'web-vitals';
+
+// Each fires once when the metric is ready
+onLCP(metric => sendToAnalytics(metric));
+// metric.name → "LCP", metric.value → ms, metric.rating → "good" | "needs-improvement" | "poor"
+```
+In production: pipe to Google Analytics 4 or any analytics endpoint via `navigator.sendBeacon`.
+
+#### React 18 — startTransition for INP
+Long event handlers block the main thread → input feels laggy → high INP.
+Fix: separate the urgent update (input value) from the expensive update (filter result):
+```tsx
+const [inputValue, setInputValue] = useState("");
+const [filter, setFilter] = useState("");
+const [isPending, startTransition] = useTransition();
+
+const handleChange = (e) => {
+  setInputValue(e.target.value);              // urgent — input updates instantly
+  startTransition(() => setFilter(e.target.value)); // deferred — React can yield to browser
+};
+```
+`isPending` is `true` while the deferred render is in progress — useful for showing a spinner.
+
+#### CLS — reserving space prevents layout shift
+- **Bad**: no width/height on images → browser lays out text → image arrives → everything jumps
+- **Good**: `aspect-ratio: 16/3` on the image container → space reserved before image loads → text never moves
+
+#### Common React causes & fixes
+
+| Metric | Common React cause | Fix |
+|--------|--------------------|-----|
+| LCP | No SSR, large unoptimised images | SSR (Next.js/Remix), image width+height, lazy load below-fold only |
+| INP | Expensive re-renders triggered by click/type | `startTransition`, `React.memo`, Web Workers for heavy compute |
+| CLS | Images without dimensions, dynamic banners | `aspect-ratio` CSS, skeleton loaders, append banners at bottom |
+| FCP | Large initial JS bundle | `React.lazy` + `Suspense` to code-split by route |
+| TTFB | Slow API blocking SSR | CDN, edge caching, stream HTML shell first |
+
+#### Live demo features
+- **Concepts tab**: threshold bar for all 5 metrics (click any metric → causes + fixes panel), `sendToAnalytics` code snippet, `startTransition` before/after comparison
+- **Demo tab**:
+  - **Live Metrics** — collects real measurements from your browser session using `onLCP`, `onINP`, `onCLS`, `onFCP`, `onTTFB`; shows rating badge (good/needs-improvement/poor)
+  - **INP Demo** — toggle between blocking and `startTransition` mode, filter 5,000 items, feel the input responsiveness difference; `isPending` indicator shows deferred render in progress
+  - **CLS Demo** — side-by-side: bad (no space reserved, text jumps) vs good (aspect-ratio skeleton, text stays still)
+
 ---
 
 ## Git & GitHub

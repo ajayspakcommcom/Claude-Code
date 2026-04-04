@@ -48,7 +48,8 @@ Build and explore all React features that are **industry standard**, level by le
 - [x] Advanced State #3 — Optimistic Updates — COMPLETE (`src/senior/advanced-state/`)
 - [x] Performance #1 — Render Profiling — COMPLETE (`src/senior/performance/`)
 - [x] Performance #2 — Virtualization (large lists) — COMPLETE (`src/senior/performance/`)
-- [ ] Performance #3 — Web Vitals ← NEXT
+- [x] Performance #3 — Web Vitals — COMPLETE (`src/senior/performance/`)
+- [ ] Performance #4 — Bundle Analysis ← NEXT
 
 ---
 

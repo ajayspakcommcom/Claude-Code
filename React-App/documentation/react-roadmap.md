@@ -105,7 +105,7 @@
 ### Performance (Deep)
 - ✅ Render profiling
 - ✅ Virtualization (large lists)
-- Web Vitals
+- ✅ Web Vitals
 - Bundle analysis
 
 ### Advanced Patterns
