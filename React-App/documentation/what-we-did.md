@@ -1554,6 +1554,49 @@ Inline render functions create a new reference on every parent re-render → mem
 - **DataFetcher** — generic `DataFetcher<T>` component handles fetch lifecycle (`loading`, `error`, `data`, `refetch`); caller decides the UI for each state; fetches from JSONPlaceholder API
 - **InView** (Intersection Observer) — manages a DOM ref + `IntersectionObserver`; passes `{ inView, ratio, ref }` to caller; scroll demo with 4 boxes that light up as they enter the viewport
 
+### ✅ Advanced Patterns #3 — Higher-Order Components (Complete)
+
+File: `src/senior/advanced-patterns/03_HOC.tsx`
+
+#### What it is
+A function that takes a component and returns a **new** component with added behaviour — without modifying the original.
+```tsx
+const AuthenticatedProfile = withAuth(withLoading(UserProfile));
+// → wraps right to left: loading wraps UserProfile, auth wraps that
+```
+
+#### Critical rules
+| Rule | Why |
+|------|-----|
+| Never create HOC inside render | Creates new component type every render → unmount + remount + state loss |
+| Always set `displayName` | Without it DevTools shows "Anonymous" for every wrapper |
+| Spread `{...props}` | Nothing gets silently dropped on the way down |
+| Use `forwardRef` | HOCs break `ref={...}` unless you explicitly forward |
+
+#### Four HOCs built
+
+| HOC | What it does |
+|-----|-------------|
+| `withLoading` | Shows spinner when `isLoading=true`, renders component when ready |
+| `withAuth` | Shows login prompt if `isAuthenticated=false`, renders component when authed |
+| `withLogger` | Logs every render (timestamp, props, render count) to console + UI |
+| `withErrorBoundary` | Wraps component in a class error boundary — only option for catching render errors |
+
+#### When HOC is the only option
+Error boundaries **must** be class components (`getDerivedStateFromError` is a class lifecycle). You can't write one as a hook. The HOC hides the class behind a clean function API.
+
+#### HOC vs Render Props vs Custom Hooks summary
+- **HOC** → cross-cutting concerns that modify a component's type (auth, error boundary, analytics)
+- **Render Props** → caller controls the rendered output; component controls logic
+- **Custom Hooks** → simplest for pure stateful logic sharing (fetch, timer, form)
+
+#### Live demo features
+- **Concepts tab**: 4 key-rule cards, comparison table (HOC vs Render Props vs Hooks × 7 criteria), "never inside render" before/after code, full HOC skeleton with `forwardRef` + `displayName`
+- **Demo tab**:
+  - **withAuth + withLoading**: click Login → see spinner → see profile; active layer highlighted in real time
+  - **withLogger**: change count or color → see render logs appear with timestamp and render number
+  - **withErrorBoundary**: click "Crash it" → boundary catches the error → "Try again" resets via key increment
+
 ---
 
 ## Git & GitHub

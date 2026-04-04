@@ -111,7 +111,7 @@
 ### Advanced Patterns
 - ✅ Compound components
 - ✅ Render props
-- Higher-order components (HOC)
+- ✅ Higher-order components (HOC)
 - Custom hooks
 
 ### Testing (Advanced)
