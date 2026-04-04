@@ -1635,6 +1635,58 @@ useEffect(() => {
 - **Extract**: same pattern in 2+ places, complex useEffect, logic has a clear name, needs unit testing
 - **Skip**: used in only one place, wraps a single hook with no added value
 
+### ✅ Testing (Advanced) #1, #2, #3 — Integration Tests, Mocking APIs, E2E (Complete)
+
+Files:
+- `src/senior/testing/components/ShoppingCart.tsx` — shared test target (realistic shopping cart)
+- `src/senior/testing/01_IntegrationTests.test.tsx` — 14 tests across 7 describe blocks
+- `src/senior/testing/02_MockingAPIs.test.tsx` — 12 tests across 6 describe blocks
+- `e2e/shopping-cart.spec.ts` — 16 Playwright specs across 7 describe blocks
+
+#### Testing Pyramid
+| Layer | Tool | Count | Speed |
+|-------|------|-------|-------|
+| E2E | Playwright (real browser) | few | slow |
+| Integration | Jest + Testing Library + MSW | many | medium |
+| Unit | Jest (pure logic, hooks) | some | fast |
+
+**"Write tests. Not too many. Mostly integration."** — Kent C. Dodds
+
+#### #1 — Integration Tests (`01_IntegrationTests.test.tsx`)
+7 flows tested on `ShoppingCart`: load → filter → add → remove → discount → full checkout → shop again
+
+Key APIs:
+- `findBy*` — async query, waits for element (post-fetch, post-state update)
+- `within(el)` — scope queries to one container, prevents ambiguous matches
+- `server.use()` — override one handler for one test; resets after each test via `server.resetHandlers()`
+- `userEvent.setup()` — realistic events (types character-by-character, fires all browser events)
+- `queryBy*` — returns null instead of throwing; use to assert element is absent
+
+#### #2 — Mocking APIs (`02_MockingAPIs.test.tsx`)
+6 suites covering all MSW patterns:
+- **Request body inspection** — capture what component sends with `await req.json()`, assert structure
+- **Slow network** — `ctx.delay(ms)` → test loading/disabled states
+- **Error simulation** — `ctx.status(500/503)` → test error UI and retry flows
+- **Stateful handler** — handler tracks call count, fails first call, succeeds second
+- **`jest.spyOn(fetch)`** — verify `/api/products` called exactly once on mount
+- **Edge cases** — empty array, single product, no crash
+
+#### #3 — E2E Playwright (`e2e/shopping-cart.spec.ts`)
+16 specs covering the same flows as integration tests but in a real browser:
+- `page.route()` — intercept requests in the browser (like MSW for Playwright)
+- `route.fulfill()` — return mocked response with custom status + body
+- Auto-waiting — Playwright waits for elements to be stable/visible/enabled automatically
+- Chained locators — `page.getByTestId('cart-item-1').getByRole('button')` scopes queries
+
+Run commands:
+```bash
+npm run test:e2e          # headless
+npm run test:e2e:ui       # interactive UI
+npm run test:e2e:headed   # watch in browser
+```
+
+Total new tests: **26 Jest + 16 Playwright = 42 tests** | Full suite: **146 Jest tests passing**
+
 ---
 
 ## Git & GitHub

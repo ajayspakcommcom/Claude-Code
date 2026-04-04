@@ -115,9 +115,9 @@
 - ✅ Custom hooks
 
 ### Testing (Advanced)
-- Integration tests
-- Mocking APIs
-- E2E (Playwright / Cypress)
+- ✅ Integration tests
+- ✅ Mocking APIs
+- ✅ E2E (Playwright / Cypress)
 
 ### Accessibility
 - ARIA
