@@ -1524,6 +1524,36 @@ The parent renders `{children}` and never inspects them — it just provides Con
 - **Use**: caller needs layout control, 2+ sub-components share one state, prop-drilling across 2+ levels
 - **Skip**: simple one-off component, sub-components are never used independently
 
+### ✅ Advanced Patterns #2 — Render Props (Complete)
+
+File: `src/senior/advanced-patterns/02_RenderProps.tsx`
+
+#### What it is
+A component accepts a **function** as `children` (or a named prop). The component handles the logic; the caller decides what to render. Makes logic reusable across completely different UIs.
+
+```tsx
+<MouseTracker>
+  {({ x, y }) => <div>Cursor at {x}, {y}</div>}
+</MouseTracker>
+```
+
+#### Render Props vs Custom Hooks
+| | Render Props | Custom Hooks |
+|-|-------------|-------------|
+| Manages DOM ref | ✓ Good fit (IntersectionObserver, drag-drop) | ✗ Harder |
+| Pure stateful logic | Verbose | ✓ Simpler |
+| Render position control | ✓ Yes | ✗ No |
+| Class component support | ✓ | ✗ |
+
+#### The performance trap
+Inline render functions create a new reference on every parent re-render → memo'd children still re-render. Fix: define the render function outside the component or wrap in `useCallback`.
+
+#### Four live examples built
+- **MouseTracker** — tracks cursor position inside a container; two different renders (crosshair lines vs radar ping dot) from the same component
+- **Toggle** — manages a boolean; rendered three ways: toggle switch, another switch, record button with live indicator
+- **DataFetcher** — generic `DataFetcher<T>` component handles fetch lifecycle (`loading`, `error`, `data`, `refetch`); caller decides the UI for each state; fetches from JSONPlaceholder API
+- **InView** (Intersection Observer) — manages a DOM ref + `IntersectionObserver`; passes `{ inView, ratio, ref }` to caller; scroll demo with 4 boxes that light up as they enter the viewport
+
 ---
 
 ## Git & GitHub

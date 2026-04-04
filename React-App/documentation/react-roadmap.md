@@ -110,7 +110,7 @@
 
 ### Advanced Patterns
 - ✅ Compound components
-- Render props
+- ✅ Render props
 - Higher-order components (HOC)
 - Custom hooks
 

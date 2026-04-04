@@ -51,7 +51,8 @@ Build and explore all React features that are **industry standard**, level by le
 - [x] Performance #3 — Web Vitals — COMPLETE (`src/senior/performance/`)
 - [x] Performance #4 — Bundle Analysis — COMPLETE (`src/senior/performance/`)
 - [x] Advanced Patterns #1 — Compound Components — COMPLETE (`src/senior/advanced-patterns/`)
-- [ ] Advanced Patterns #2 — Render Props ← NEXT
+- [x] Advanced Patterns #2 — Render Props — COMPLETE (`src/senior/advanced-patterns/`)
+- [ ] Advanced Patterns #3 — Higher-Order Components (HOC) ← NEXT
 
 ---
 
