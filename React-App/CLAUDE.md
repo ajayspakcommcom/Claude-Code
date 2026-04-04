@@ -53,7 +53,8 @@ Build and explore all React features that are **industry standard**, level by le
 - [x] Advanced Patterns #1 — Compound Components — COMPLETE (`src/senior/advanced-patterns/`)
 - [x] Advanced Patterns #2 — Render Props — COMPLETE (`src/senior/advanced-patterns/`)
 - [x] Advanced Patterns #3 — Higher-Order Components (HOC) — COMPLETE (`src/senior/advanced-patterns/`)
-- [ ] Advanced Patterns #4 — Custom Hooks ← NEXT
+- [x] Advanced Patterns #4 — Custom Hooks — COMPLETE (`src/senior/advanced-patterns/`)
+- [ ] Testing (Advanced) #1 — Integration Tests ← NEXT
 
 ---
 

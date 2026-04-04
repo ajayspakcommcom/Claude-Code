@@ -1597,6 +1597,44 @@ Error boundaries **must** be class components (`getDerivedStateFromError` is a c
   - **withLogger**: change count or color → see render logs appear with timestamp and render number
   - **withErrorBoundary**: click "Crash it" → boundary catches the error → "Try again" resets via key increment
 
+### ✅ Advanced Patterns #4 — Custom Hooks (Complete)
+
+File: `src/senior/advanced-patterns/04_CustomHooks.tsx`
+
+#### What they are
+Regular JS functions whose name starts with `use` and that call other hooks inside. That's the entire definition — no special API needed.
+
+#### Three rules
+1. Name **must** start with `use` — React's linter enforces hook rules by name
+2. Call hooks at the **top level** only — no ifs, loops, nested functions
+3. Always **return cleanup** from useEffect when you add listeners or timers
+
+#### Six hooks built
+
+| Hook | Returns | Key technique |
+|------|---------|---------------|
+| `useDebounce(value, delay)` | `T` | `setTimeout` + cleanup in `useEffect` — clears timer on every value change |
+| `useLocalStorage(key, initial)` | `[T, setter]` | Lazy initializer reads from storage on first render; `useCallback` setter writes back |
+| `useMediaQuery(query)` | `boolean` | `window.matchMedia` + `change` event listener; re-evaluates on viewport resize |
+| `useEventListener(event, handler)` | `void` | Handler ref trick — saves handler to `useRef` so the effect never re-attaches |
+| `useInterval(callback, delay\|null)` | `void` | `null` delay = paused; callback ref keeps interval stable when speed changes |
+| `useUndoable(initial)` | `{ value, set, undo, redo, canUndo, canRedo }` | `useReducer` with past/present/future arrays |
+
+#### Handler ref trick (useEventListener)
+```tsx
+const savedHandler = useRef(handler);
+useEffect(() => { savedHandler.current = handler; }, [handler]); // always fresh
+useEffect(() => {
+  const listener = (e) => savedHandler.current(e);
+  window.addEventListener(event, listener);
+  return () => window.removeEventListener(event, listener);
+}, [event]); // only re-attaches if event name changes, never for handler changes
+```
+
+#### When to extract / skip
+- **Extract**: same pattern in 2+ places, complex useEffect, logic has a clear name, needs unit testing
+- **Skip**: used in only one place, wraps a single hook with no added value
+
 ---
 
 ## Git & GitHub

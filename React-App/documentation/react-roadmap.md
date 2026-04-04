@@ -112,7 +112,7 @@
 - ✅ Compound components
 - ✅ Render props
 - ✅ Higher-order components (HOC)
-- Custom hooks
+- ✅ Custom hooks
 
 ### Testing (Advanced)
 - Integration tests
