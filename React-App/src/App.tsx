@@ -58,6 +58,10 @@ import CompositionPatternsDemo from "./intermediate/advanced-react/03_Compositio
 import RefsAdvancedDemo from "./intermediate/advanced-react/04_Refs";
 import ContextAPIDemo from "./intermediate/advanced-react/05_ContextAPI";
 
+import RenderProfilingDemo from "./senior/performance/01_RenderProfiling";
+import VirtualizationDemo from "./senior/performance/02_Virtualization";
+import { WebVitals } from "./senior/performance/03_WebVitals";
+
 import Counter from "./beginner/practice/01_Counter";
 import TodoApp from "./beginner/practice/02_TodoApp";
 import CRUDApp from "./beginner/practice/03_CRUDApp";
@@ -194,6 +198,13 @@ const App = () => {
       <hr />
       <section><ContextAPIDemo /></section>
 
+      <h1>Senior — Performance</h1>
+      <hr />
+      <section><RenderProfilingDemo /></section>
+      <hr />
+      <section><VirtualizationDemo /></section>
+      <hr />
+      <section><WebVitals /></section>
 
     </div>
   );
