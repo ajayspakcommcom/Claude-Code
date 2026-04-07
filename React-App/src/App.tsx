@@ -69,6 +69,7 @@ import CustomHooks from "./senior/advanced-patterns/04_CustomHooks";
 import { TestingExplainer } from "./senior/testing/TestingExplainer";
 import { AccessibilityExplainer } from "./senior/accessibility/AccessibilityExplainer";
 import { SecurityExplainer } from "./senior/security/SecurityExplainer";
+import { CodeQualityExplainer } from "./senior/code-quality/CodeQualityExplainer";
 
 import Counter from "./beginner/practice/01_Counter";
 import TodoApp from "./beginner/practice/02_TodoApp";
@@ -237,6 +238,10 @@ const App = () => {
       <h1>Senior — Security</h1>
       <hr />
       <section><SecurityExplainer /></section>
+
+      <h1>Senior — Code Quality</h1>
+      <hr />
+      <section><CodeQualityExplainer /></section>
 
     </div>
   );
