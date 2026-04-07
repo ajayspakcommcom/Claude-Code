@@ -60,7 +60,7 @@ Build and explore all React features that are **industry standard**, level by le
 - [x] Accessibility — ARIA, Keyboard Navigation, Screen Readers — COMPLETE (`src/senior/accessibility/`)
 - [x] Security — XSS Prevention, CSRF Basics, Secure Auth — COMPLETE (`src/senior/security/`)
 - [x] Code Quality — ESLint + Prettier, Husky + lint-staged, Code Reviews — COMPLETE (`src/senior/code-quality/`)
-- [ ] Practice — Large-scale app, Role-based access ← NEXT
+- [x] Practice — TeamDesk app, RBAC, Micro-frontend intro — COMPLETE (`src/senior/practice/`)
 
 ---
 

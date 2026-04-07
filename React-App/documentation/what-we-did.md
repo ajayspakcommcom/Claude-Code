@@ -1836,6 +1836,65 @@ Files:
 
 ---
 
+### ✅ Senior Practice — TeamDesk, RBAC, Micro-Frontend Intro (Complete)
+
+Files:
+- `src/senior/practice/01_SeniorPractice.test.tsx` — 33 tests across 9 describe blocks
+- `src/senior/practice/SeniorPracticeApp.tsx` — full TeamDesk dashboard app
+
+#### Three Topics
+
+| Topic | What it covers |
+|-------|---------------|
+| Large-scale app | Feature-based structure, separation of concerns, custom hooks, clean patterns |
+| Role-based access | RBAC permission matrix, policy functions, PermissionGate, RequireRole guard |
+| Micro-frontend | Module Federation concept, lazy remote loading, error boundary for failed remotes |
+
+#### RBAC system
+
+Permission matrix stores access as data — not scattered `if (role === "admin")` checks:
+```ts
+const PERMISSIONS = {
+  projects: { create: ['admin','editor'], delete: ['admin'] },
+  settings: { view: ['admin'] },
+  reports: { view: ['admin','editor'] },
+}
+const can = (role, resource, action) =>
+  PERMISSIONS[resource]?.[action]?.includes(role) ?? false;
+```
+
+Policy functions handle owner-aware rules:
+- `canDeleteProject(role, userId, ownerId)` — admin always, editor never even if owner
+- `canEditProject(role, userId, ownerId)` — admin always, editor only if owner
+
+#### TeamDesk app features
+- **Login screen** — select user persona (Admin / Editor / Viewer)
+- **Projects tab** — filter by status, create/edit/delete based on role+ownership
+- **Activity log** — recent actions, visible to all roles
+- **Settings tab** — admin only (hidden from nav for editor/viewer)
+- **Micro-Frontend tab** — Module Federation code + simulated remote load demo
+- **Sidebar** — live permission matrix showing what the current user can/cannot do
+
+#### Test coverage (33 tests)
+- **RBAC permission matrix** (9 tests) — all role/resource/action combinations, policy functions
+- **Auth flow** (5 tests) — login, role display, invalid creds, logout
+- **Admin role UI** (4 tests) — Settings tab, New project, Delete on all projects, settings access
+- **Editor role UI** (4 tests) — no Settings, New project, Edit own project, no Edit on others
+- **Viewer role UI** (3 tests) — no Edit/Delete, no New project, no Settings
+- **Project CRUD** (3 tests) — admin create, admin delete, editor edits own project
+- **Activity feed** (1 test) — entries visible to viewer
+- **Route guard** (2 tests) — RequireRole renders fallback, renders children when authorized
+- **Micro-frontend** (3 tests) — lazy remote load, parallel remotes, error boundary on failure
+
+#### Micro-frontend (Module Federation) concept
+- Shell (host) app uses `ModuleFederationPlugin` to declare remotes by URL
+- `import('remoteTeam/TeamModule')` resolves at runtime — no rebuild of shell needed
+- `shared: { react: { singleton: true } }` — React loaded once across all remotes
+- Error boundary wraps each remote — one failed remote doesn't crash the whole app
+- Tested with `React.lazy` + `Promise.resolve/reject` to simulate remote load/failure
+
+---
+
 ## Git & GitHub
 - Remote: https://github.com/ajayspakcommcom/Claude-Code.git
 - Branch: `main`

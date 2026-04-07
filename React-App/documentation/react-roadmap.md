@@ -135,9 +135,9 @@
 - ✅ Code reviews
 
 ### Practice
-- Large-scale app
-- Role-based access
-- Micro-frontend exposure (intro)
+- ✅ Large-scale app
+- ✅ Role-based access
+- ✅ Micro-frontend exposure (intro)
 
 ---
 
