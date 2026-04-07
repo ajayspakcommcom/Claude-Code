@@ -64,7 +64,8 @@ Build and explore all React features that are **industry standard**, level by le
 
 ## Expert Progress
 - [x] Internals — Reconciliation, Fiber, Concurrent Rendering, React Compiler — COMPLETE (`src/expert/internals/`)
-- [ ] Advanced Rendering — SSR/SSG, Streaming, Hydration ← NEXT
+- [x] Advanced Rendering — SSR/SSG, Streaming, Hydration — COMPLETE (`src/expert/advanced-rendering/`)
+- [ ] Framework Mastery — Next.js App Router, Server Components, Edge rendering ← NEXT
 
 ---
 

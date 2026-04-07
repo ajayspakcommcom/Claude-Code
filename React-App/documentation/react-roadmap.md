@@ -152,9 +152,9 @@
 - ✅ React Compiler concepts
 
 ### Advanced Rendering
-- SSR / SSG
-- Streaming
-- Hydration strategies
+- ✅ SSR / SSG
+- ✅ Streaming
+- ✅ Hydration strategies
 
 ### Framework Mastery
 - Next.js (App Router)

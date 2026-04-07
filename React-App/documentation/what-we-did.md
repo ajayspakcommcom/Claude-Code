@@ -1941,3 +1941,46 @@ Files:
 - **Concurrent** (5 tests) — useTransition isPending, useDeferredValue, Suspense fallback → content, startTransition stays responsive, independent Suspense boundaries
 - **React Compiler** (5 tests) — pure component same-in/same-out, useMemo cache, useCallback stable ref, impure render proof, inline object vs stable constant
 
+
+### ✅ Expert — Advanced Rendering: SSR, SSG, Streaming, Hydration (Complete)
+
+Files:
+- `src/expert/advanced-rendering/01_AdvancedRendering.test.tsx` — 20 tests across 4 describe blocks
+- `src/expert/advanced-rendering/AdvancedRenderingExplainer.tsx` — visual explainer + 4 live demos
+
+#### Three Topics
+
+| Topic | What it covers |
+|-------|---------------|
+| SSR / SSG | renderToString, renderToStaticMarkup, SSG pre-rendering, ISR simulation |
+| Streaming | renderToPipeableStream, onShellReady, onAllReady, onShellError, Suspense boundaries |
+| Hydration | hydrateRoot, DOM reuse, client-only values via useEffect, selective hydration, progressive hydration, suppressHydrationWarning |
+
+#### Key concepts
+
+**SSR vs SSG vs ISR:**
+- CSR: empty `<div id="root">` — content invisible to crawlers, slow FCP
+- SSR: full HTML on every request — fast FCP + SEO, high server CPU
+- SSG: HTML built at `npm run build` → served by CDN — fastest FCP, no server cost, may be stale
+- ISR: SSG + `revalidate: 60` — stale-while-revalidate pattern, best of SSG + SSR
+
+**Streaming flow:** `onShellReady` fires immediately → shell pipes to response → each Suspense boundary streams replacement HTML as data resolves → `onAllReady` when fully done (use for crawlers/SSG)
+
+**Hydration strategies:**
+- Full: `hydrateRoot(document, <App />)` — entire tree, simple but expensive
+- Selective (React 18): Suspense boundaries hydrate independently, user interaction prioritized
+- Partial/Islands: only interactive components hydrated (Astro, Fresh)
+- Progressive: `requestIdleCallback` defers non-critical islands
+
+**Hydration mismatch causes/fixes:**
+- `new Date()` → `useEffect(() => setDate(new Date()), [])`
+- `Math.random()` → `useId()` (stable across server/client)
+- `window` in render → `typeof window !== 'undefined'` guard or `useEffect`
+- `suppressHydrationWarning` for known intentional differences
+
+#### Test coverage (20 tests)
+- **SSR** (6 tests) — renderToString output, semantic HTML for SEO, renderToStaticMarkup lighter, SSG page map, ISR cache + revalidate simulation
+- **Streaming** (5 tests) — onShellReady fires first, same content as renderToString, onShellError on crash, onAllReady for crawlers, shell streams before Suspense resolves
+- **Hydration** (6 tests) — hydrateRoot attaches handlers, DOM nodes preserved (same reference), client-only values via useEffect, selective/independent Suspense islands, progressive idle hydration, suppressHydrationWarning
+- **Strategy comparison** (3 tests) — CSR empty shell, SSR content-rich HTML, SSG build-time all pages
+
