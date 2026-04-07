@@ -1899,3 +1899,45 @@ Policy functions handle owner-aware rules:
 - Remote: https://github.com/ajayspakcommcom/Claude-Code.git
 - Branch: `main`
 - `.gitignore` excludes: `node_modules/`, `dist/`, `build/`
+
+### ✅ Expert — Internals: Reconciliation, Fiber, Concurrent, React Compiler (Complete)
+
+Files:
+- `src/expert/internals/01_Internals.test.tsx` — 21 tests across 4 describe blocks
+- `src/expert/internals/InternalsExplainer.tsx` — visual explainer + 5 live demos
+
+#### Four Topics
+
+| Topic | What it covers |
+|-------|---------------|
+| Reconciliation | Type change → remount, key as identity, stable vs index keys, memo skipping |
+| Fiber | Linked list work units, two-phase commit, double buffering, hook linked list |
+| Concurrent Rendering | startTransition, useTransition, useDeferredValue, Suspense, priority lanes |
+| React Compiler | Auto-memoization, purity rules, before/after code, enable via Babel plugin |
+
+#### Key concepts
+
+**Reconciliation rules:**
+1. Different element type → always remount (div → span tears down entire subtree)
+2. Same type → update in place (only changed attributes patched)
+3. Key change → remount even if type is identical (use for resetting state)
+4. Stable keys → state follows the item across reorders; index keys → state follows position (wrong!)
+
+**Fiber node fields:** `type`, `key`, `child/sibling/return` (linked list), `memoizedState` (hook linked list), `lanes` (priority bitmask), `flags` (DOM work), `alternate` (double buffer)
+
+**Two-phase commit:**
+- Phase 1 (render) — interruptible, can restart, calls component functions
+- Phase 2 (commit) — synchronous, never interrupted, writes DOM, fires effects
+
+**Effect ordering:** render → DOM write → useLayoutEffect → browser paint → useEffect
+
+**Concurrent priority lanes:** SyncLane (input) > InputContinuousLane (scroll) > DefaultLane (network) > TransitionLane (startTransition) > OffscreenLane (Suspense)
+
+**React Compiler purity rules:** pure components, no render-time side effects, no prop/state mutation, hooks at top level, don't read refs during render
+
+#### Test coverage (21 tests)
+- **Reconciliation** (6 tests) — type change unmounts/remounts, same type updates in place, key change forces remount, stable key preserves state on reorder, index key loses state on prepend, memo skips child render
+- **Fiber** (5 tests) — independent hook state, cleanup before next effect, StrictMode double-invoke, ref no re-render, useLayoutEffect before useEffect
+- **Concurrent** (5 tests) — useTransition isPending, useDeferredValue, Suspense fallback → content, startTransition stays responsive, independent Suspense boundaries
+- **React Compiler** (5 tests) — pure component same-in/same-out, useMemo cache, useCallback stable ref, impure render proof, inline object vs stable constant
+

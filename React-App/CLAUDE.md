@@ -62,6 +62,10 @@ Build and explore all React features that are **industry standard**, level by le
 - [x] Code Quality — ESLint + Prettier, Husky + lint-staged, Code Reviews — COMPLETE (`src/senior/code-quality/`)
 - [x] Practice — TeamDesk app, RBAC, Micro-frontend intro — COMPLETE (`src/senior/practice/`)
 
+## Expert Progress
+- [x] Internals — Reconciliation, Fiber, Concurrent Rendering, React Compiler — COMPLETE (`src/expert/internals/`)
+- [ ] Advanced Rendering — SSR/SSG, Streaming, Hydration ← NEXT
+
 ---
 
 ## Folder Structure

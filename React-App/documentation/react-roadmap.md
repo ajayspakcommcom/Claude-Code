@@ -146,10 +146,10 @@
 **Goal:** Lead, optimize, and innovate.
 
 ### Internals
-- Reconciliation
-- Fiber architecture
-- Concurrent rendering
-- React Compiler concepts
+- ✅ Reconciliation
+- ✅ Fiber architecture
+- ✅ Concurrent rendering
+- ✅ React Compiler concepts
 
 ### Advanced Rendering
 - SSR / SSG
