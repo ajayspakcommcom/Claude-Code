@@ -72,6 +72,7 @@ import { SecurityExplainer } from "./senior/security/SecurityExplainer";
 import { CodeQualityExplainer } from "./senior/code-quality/CodeQualityExplainer";
 import { TeamDeskApp } from "./senior/practice/SeniorPracticeApp";
 import { InternalsExplainer } from "./expert/internals/InternalsExplainer";
+import { AdvancedRenderingExplainer } from "./expert/advanced-rendering/AdvancedRenderingExplainer";
 
 import Counter from "./beginner/practice/01_Counter";
 import TodoApp from "./beginner/practice/02_TodoApp";
@@ -252,6 +253,10 @@ const App = () => {
       <h1>Expert — Internals</h1>
       <hr />
       <section><InternalsExplainer /></section>
+
+      <h1>Expert — Advanced Rendering</h1>
+      <hr />
+      <section><AdvancedRenderingExplainer /></section>
 
     </div>
   );

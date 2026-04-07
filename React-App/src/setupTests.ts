@@ -6,3 +6,12 @@ import "@testing-library/jest-dom";
 // jsdom does not expose Node 18's built-in fetch — this makes it available
 // so MSW and components using fetch() work without global.fetch = jest.fn().
 import "cross-fetch/polyfill";
+
+// Polyfill setImmediate — required by react-dom/server.node (renderToPipeableStream).
+// jsdom does not expose Node's setImmediate globally.
+if (typeof globalThis.setImmediate === "undefined") {
+  (globalThis as unknown as Record<string, unknown>).setImmediate = (
+    fn: (...args: unknown[]) => void,
+    ...args: unknown[]
+  ) => setTimeout(fn, 0, ...args);
+}

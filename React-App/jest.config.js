@@ -27,6 +27,9 @@ module.exports = {
   moduleNameMapper: {
     "\\.module\\.css$": "<rootDir>/src/__mocks__/styleMock.js",
     "\\.css$":          "<rootDir>/src/__mocks__/styleMock.js",
+    // Use the Node build of react-dom/server (jsdom resolves to browser build,
+    // which requires TextEncoder — not available in older jsdom versions)
+    "^react-dom/server$": "<rootDir>/node_modules/react-dom/server.node.js",
   },
 
   // Where to find tests
