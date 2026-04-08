@@ -77,6 +77,7 @@ import { FrameworkMasteryExplainer } from "./expert/framework-mastery/FrameworkM
 import { PerformanceAtScaleExplainer } from "./expert/performance-at-scale/PerformanceAtScaleExplainer";
 import { DesignSystemsExplainer } from "./expert/design-systems/DesignSystemsExplainer";
 import { FrontendSystemDesignExplainer } from "./expert/frontend-system-design/FrontendSystemDesignExplainer";
+import { LeadershipExplainer } from "./expert/leadership/LeadershipExplainer";
 
 import Counter from "./beginner/practice/01_Counter";
 import TodoApp from "./beginner/practice/02_TodoApp";
@@ -277,6 +278,10 @@ const App = () => {
       <h1>Expert — Frontend System Design</h1>
       <hr />
       <section><FrontendSystemDesignExplainer /></section>
+
+      <h1>Expert — Leadership</h1>
+      <hr />
+      <section><LeadershipExplainer /></section>
 
     </div>
   );
