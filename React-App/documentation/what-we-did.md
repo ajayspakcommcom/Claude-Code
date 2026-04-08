@@ -2105,3 +2105,55 @@ Files:
 - **Memory** (7 tests) — LRU evicts LRU entry, preserves MRU order, re-insert moves to MRU, setInterval cleanup prevents leak, event listener removed on unmount, listener leaks when no cleanup, useLRUCache hook bounded
 - **Browser rendering** (9 tests) — CRP has 7 stages in order, each stage has description, transform/opacity → composite-only, color/background → paint, width/height → layout+paint, batched layout = 1 reflow, thrashing = N reflows, rAF cleanup on unmount, inactive rAF = no frames
 - **Advanced caching** (20 tests) — no-store parse, max-age + s-maxage parse, stale-while-revalidate parse, immutable + private parse, strategy resolution (no-cache/browser-only/immutable/swr/cdn-short/cdn-long), SWR fresh/stale/miss/no-double-fetch, ETag 200/304/stale-etag-200, Vary CDN keys (encoding/language/same=hit)
+
+### ✅ Expert — Design Systems: Monorepos, Component Libraries, Theming & Tokens (Complete)
+
+Files:
+- `src/expert/design-systems/01_DesignSystems.test.tsx` — 29 tests across 3 describe blocks
+- `src/expert/design-systems/DesignSystemsExplainer.tsx` — visual explainer + 3 tabbed demos
+
+#### Three Topics
+
+| Topic | What it covers |
+|-------|---------------|
+| Monorepos | Dependency graph, affected package detection, topological build order, Turborepo task caching |
+| Versioned Component Libraries | Semver parsing/bumping, changeset workflow, tree-shaking analysis, peer dependencies |
+| Theming & Tokens | Three-tier token system, ThemeProvider + Context, themed components, CSS custom properties, multi-theme |
+
+#### Key concepts
+
+**Monorepos:**
+- `apps/` + `packages/` workspace structure (pnpm/npm/yarn workspaces)
+- Dependency graph: change `tokens` → affects `ui` → affects `web` + `docs` (transitive)
+- Topological build order: dependencies always build before dependents (`^build` in turbo.json)
+- Turborepo caching: task keyed by `pkg:task:inputHash` — same hash = instant cache hit, zero rebuild
+
+**Semver:**
+- `MAJOR.MINOR.PATCH` — breaking / new feature / bug fix
+- Pre-release: `alpha` → `beta` → `rc` before stable
+- Changeset workflow: developers declare intent → tooling bumps versions + writes CHANGELOG on merge
+- Multiple changesets touching same package: highest bump type wins (major > minor > patch)
+
+**Tree-shaking:**
+- Requires ESM named exports + `"sideEffects": false` in package.json
+- CommonJS (`require`) cannot be tree-shaken — bundler must include entire file
+- Side-effectful modules (CSS injection, polyfills) are always included regardless of import
+
+**Peer dependencies:**
+- Libraries declare `react` in `peerDependencies`, not `dependencies`
+- Prevents two copies of React → invalid hook calls / context not shared
+
+**Design token tiers:**
+1. Primitive: raw values named by scale (`color.purple.500 = #6366f1`)
+2. Semantic: named by purpose, references primitives (`color.interactive.default = {color.purple.500}`)
+3. Component: scoped to one component, references semantics (`button.background = {color.interactive.default}`)
+
+**CSS custom properties theming:**
+- `ThemeProvider` sets `data-theme` attribute; CSS `[data-theme="dark"]` selector overrides vars
+- No re-render cascade for purely visual changes — browser handles var propagation
+- `tokensToCSSVars()` serialises token object → `{ "--color-primary": "#6366f1", ... }`
+
+#### Test coverage (29 tests)
+- **Monorepo** (6 tests) — token change affects ui/web/docs not api, utils change affects api/ui/web, leaf change = only itself, topological order correct, Turborepo: all cached on second run, changed hash = only that package rebuilt
+- **Component library** (13 tests) — parse semver, parse with pre-release, patch/minor/major bump, breaking/backward-compatible detection, changeset highest-bump-wins, changeset only bumps listed packages, tree-shaking eliminates unused (no side effects), tree-shaking keeps side-effectful exports
+- **Theming** (10 tests) — ThemeProvider sets data-theme, light token values, dark switch updates tokens, high-contrast tokens, Button primary color, Button danger color, Button reflects dark theme after switch, Card uses surface/border tokens, Badge success color, CSS vars generated correctly, dark vars differ from light (spacing same)

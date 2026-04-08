@@ -167,9 +167,9 @@
 - ✅ Advanced caching (CDN, Edge)
 
 ### Design Systems
-- Monorepos (Nx / Turborepo)
-- Versioned component libraries
-- Theming & tokens
+- ✅ Monorepos (Nx / Turborepo)
+- ✅ Versioned component libraries
+- ✅ Theming & tokens
 
 ### Frontend System Design
 - Micro-frontends (Module Federation)
